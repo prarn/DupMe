@@ -3,7 +3,7 @@ import { Socket, io } from "socket.io-client";
 import { ServerToClientEvents, ClientToServerEvents } from "../../typings";
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
-  "http://localhost:3000/"
+  ":3000"
 );
 
 // socket.on("connect",() => {
