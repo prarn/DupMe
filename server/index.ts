@@ -2,13 +2,12 @@ import express from "express";
 import { createServer } from "http";
 import { Server, Socket } from "socket.io";
 import cors from "cors";
-import { ClientToServerEvents, ServerToClientEvents } from "../typings";
 
 const app = express();
 app.use(cors());
 
 const server = createServer(app);
-const io = new Server<ClientToServerEvents, ServerToClientEvents>(server, {
+const io = new Server(server, {
   cors: {
     origin: "*",
     methods: ["GET", "POST"],
@@ -16,23 +15,14 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents>(server, {
   },
 });
 
-io.on(
-  "connection",
-  (socket: Socket<ClientToServerEvents, ServerToClientEvents>) => {
-    // console.log(socket.id); //show socket id in console
-    socket.on("clientMsg", (data) => {
-      if(data.room === "" ) {
-        io.sockets.emit("serverMsg", data);
-      }else {
-        socket.join(data.room);
-        io.to(data.room).emit("serverMsg",data);
-      }
-      // io.sockets.emit("serverMsg", data); //Send to everyone including sender
-      // socket.broadcast.emit("serverMsg", data); //Send to everyone except sender
-    });
+import gameHandler from "./Handler/gameHandler";
+
+io.on( "connection", (socket) => {
+    console.log(`User connected: ${socket.id}`)
+    gameHandler(io,socket)
   }
 );
 
 server.listen(3000, '0.0.0.0', function(){
-  console.log('listen on *:3000')
+  console.log('listen on PORT:3000')
 });
