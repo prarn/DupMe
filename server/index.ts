@@ -16,10 +16,12 @@ const io = new Server(server, {
 });
 
 import gameHandler from "./Handler/gameHandler";
+import roomHandler from "./Handler/roomHandler";
 
 io.on( "connection", (socket) => {
     console.log(`User connected: ${socket.id}`)
     gameHandler(io,socket)
+    roomHandler(io,socket)
   }
 );
 

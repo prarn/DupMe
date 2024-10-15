@@ -7,6 +7,7 @@ function gameHandler(io:Server, socket: Socket) {
     }
 
     socket.on("send_noteslist",sendNoteList);
+    
     return () =>{
         socket.off("send_noteslist",sendNoteList);
     }
