@@ -7,7 +7,7 @@ function Home() {
                 <button>Home</button>
             </Link>
             <p></p>
-            <Link to='/piano'>
+            <Link to='/rooms'>
                 <button>Game</button>
             </Link>
         </h1>
