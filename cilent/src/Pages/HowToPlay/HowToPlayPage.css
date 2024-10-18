@@ -1,0 +1,45 @@
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.container {
+    width: 1000px;
+    height: 550px;
+    background-color: #f1dec9;
+    border: 5px solid #8c564b;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 30px;
+}
+.instrument {
+    margin-top: 20px;
+}
+.instrument img {
+    width: 450px;
+}
+.menu {
+    display: flex;
+    flex-direction: column; /* Stack buttons vertically */
+    align-items: center;
+    gap: 15px; /* Space between buttons */
+    margin-top: 20px;
+  }
+  
+  /* Individual button styling - maintaining original look */
+ 
+.menu-button {
+    cursor: pointer;
+    width: 200px; /* Button size */
+    height: auto;
+    background-color: #ffffff; /* White background */
+    border: 4px solid #333; /* Black border */
+    text-align: center; /* Center text in button */
+    padding: 10px;
+}
