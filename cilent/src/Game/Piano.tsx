@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
 import socket from "../socket";
-import Countdown from '../Countdown';
 
 function Piano() {
     const notes = ['C','D','E','F','G','A','B'];
     const [noteList , setNoteList] = useState<{id: number; note: string}[]>([]);
     const [noteList_Received , setNoteList_Received] = useState<{id: number; note: string}[]>([]);
-    const [isRunning, setIsRunning] = useState(false);
-    // const [isCreating, setIsCreating] = useState(false);
+    const [countdown, setCountdown] = useState(10);
 
     const handleClickKeys = (item: string) => {
         if (noteList.length < 5) {
@@ -18,13 +16,14 @@ function Piano() {
                 return newNoteList;
             });
         }
-            
     }
 
     const handleSubmit = () => {
-        socket.emit("send_noteslist", {noteList: noteList});
-        setIsRunning(false)
-        setNoteList([])
+        if (countdown > 0) {
+            socket.emit("stop_countdown");
+        }
+        socket.emit("send_noteslist", { noteList });
+        setNoteList([]);
     }
 
     const handleReset = () => {
@@ -32,9 +31,25 @@ function Piano() {
     }
 
     const handleCreate = () => {
-        setIsRunning(true)
-        // setIsCreating(true);
+        setCountdown(10);
+        socket.emit("start_game", "Room1", countdown);
     }
+
+    useEffect(() => {
+        socket.on("countdown_update", (data) => {
+            setCountdown(data.countdown);
+        });
+
+        socket.on("countdown_finished", () => {
+            setCountdown(0);
+            handleSubmit();
+        });
+
+        return () => {
+            socket.off("countdown_update");
+            socket.off("countdown_finished");
+        };
+    }, []);
 
     useEffect(() => {
         const receiveNotes = (data: { id: number; note: string }[]) => {
@@ -60,12 +75,7 @@ function Piano() {
             <p></p>
         </div>
         <div>
-            <div>Countdown</div>
-            <Countdown 
-            key={`countdown`} 
-            duration={10} 
-            isRunning={isRunning} 
-            onTimeout={handleSubmit} />
+            <div>Countdown: {countdown}</div> {/* Countdown displayed directly */}
         </div>
             <div className="piano-keys">
                 {notes.map((item) => (
