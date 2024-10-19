@@ -1,6 +1,6 @@
 import Page404 from './Pages/Page404/Page404';
 import Home from './Pages/Home/Home';
-import Piano from './Game/Piano';
+import Piano from './Pages/Game/Piano';
 import { Route, Routes } from "react-router-dom";
 import Rooms from './Pages/Rooms/Rooms';
 

@@ -12,7 +12,7 @@ function UserModal({ setUserCreated }: { setUserCreated: (value: boolean) => voi
     };
 
     return (
-        <div className="modal">
+        <>
             <div className="modal-content">
                 <h2>Enter Your Name</h2>
                 <input
@@ -23,7 +23,7 @@ function UserModal({ setUserCreated }: { setUserCreated: (value: boolean) => voi
                 />
                 <button onClick={handleSubmit}>Submit</button>
             </div>
-        </div>
+        </>
     );
 }
 

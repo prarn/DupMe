@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import socket from "../socket";
+import socket from "../../socket";
 
 function Piano() {
     const notes = ['C','D','E','F','G','A','B'];
@@ -22,17 +22,21 @@ function Piano() {
         if (countdown > 0) {
             socket.emit("stop_countdown");
         }
-        socket.emit("send_noteslist", { noteList });
-        setNoteList([]);
-    }
+        if (noteList.length > 0) {
+            socket.emit("send_noteslist", noteList);
+            setNoteList([]);
+        }
+    };
 
     const handleReset = () => {
         setNoteList([]);
     }
 
     const handleCreate = () => {
-        setCountdown(10);
-        socket.emit("start_game", "Room1", countdown);
+        if (countdown<=0) {
+            setCountdown(10);
+        }
+        socket.emit("start_game", countdown);
     }
 
     useEffect(() => {
@@ -71,11 +75,11 @@ function Piano() {
     return (
         <>
         <div>
-            <button onClick={handleCreate}>Ready!!</button>
+            <button onClick={handleCreate}>Start</button>
             <p></p>
         </div>
         <div>
-            <div>Countdown: {countdown}</div> {/* Countdown displayed directly */}
+            <div>Countdown: {countdown}</div>
         </div>
             <div className="piano-keys">
                 {notes.map((item) => (

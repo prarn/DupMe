@@ -23,7 +23,7 @@ function Rooms() {
             setRooms(data);
         })
         socket.on('alert_roomfull',() => {
-            alert("Room is full!");
+            alert("Room slot is full!");
         })
         return () => {
             socket.off('update_rooms');
@@ -44,11 +44,11 @@ function Rooms() {
 
     return (
         <div>
-            {!userCreated && (
+            {/* {!userCreated && ( */}
                 <UserModal setUserCreated={setUserCreated} />
-            )}
+            {/* )} */}
             
-            {userCreated && (
+            {/* {userCreated && ( */}
                 <>
                     <button onClick={handleCreateRoom}>Create Room</button>
                     {rooms.map((item) => (
@@ -61,7 +61,7 @@ function Rooms() {
                         </div>
                     ))}
                 </>
-            )}
+            {/* )} */}
         </div>
     )
 }
