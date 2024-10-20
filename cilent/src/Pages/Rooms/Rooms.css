@@ -1,0 +1,37 @@
+.main-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Start aligning from the top */
+    align-items: center;
+    height: 100vh; 
+}
+
+.header {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.createlobby-button {
+    width: 300px;
+    cursor: pointer;
+}
+
+.no-lobby-banner {
+    background-color: #655454;
+    opacity: 0.82;
+    width: 100vw;
+    height: 150px;
+    color: white;
+    font-size: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.mainmenu-button{
+    width: 200px;
+    cursor: pointer;
+}

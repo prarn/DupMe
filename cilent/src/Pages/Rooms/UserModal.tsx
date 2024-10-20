@@ -1,5 +1,6 @@
 import { useState } from "react";
 import socket from "../../socket";
+import './UserModal.css';
 
 function UserModal({ setUserCreated }: { setUserCreated: (value: boolean) => void }) {
     const [username, setUsername] = useState("");
