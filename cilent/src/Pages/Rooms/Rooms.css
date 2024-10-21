@@ -1,7 +1,7 @@
 .main-container {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; /* Start aligning from the top */
+    justify-content: space-around; /* Start aligning from the top */
     align-items: center;
     height: 100vh; 
 }
@@ -14,15 +14,17 @@
 }
 
 .createlobby-button {
-    width: 300px;
+    width: 350px;
     cursor: pointer;
 }
 
 .no-lobby-banner {
+    position: fixed;
+    top: 40%;
     background-color: #655454;
     opacity: 0.82;
     width: 100vw;
-    height: 150px;
+    height: 175px;
     color: white;
     font-size: 40px;
     display: flex;
@@ -32,6 +34,7 @@
 }
 
 .mainmenu-button{
-    width: 200px;
+    width: 300px;
+    margin-bottom: 30px;
     cursor: pointer;
 }

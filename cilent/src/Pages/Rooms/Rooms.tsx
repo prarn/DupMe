@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import UserModal from "./UserModal";
 import "./Rooms.css";
 import { Link } from "react-router-dom";
+import Lobby from "./Lobby";
 
 function Rooms() {
   const navigate = useNavigate();
@@ -59,9 +60,11 @@ function Rooms() {
         No Lobby
       </div>
 
-      <div>
+      <Lobby/>
+
+      <div className="user-modal">
         {/* {!userCreated && ( */}
-        <UserModal setUserCreated={setUserCreated} />
+        {/* <UserModal setUserCreated={setUserCreated} /> */}
         {/* )} */}
       </div>
 
