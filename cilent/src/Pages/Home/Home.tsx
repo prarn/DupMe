@@ -14,25 +14,27 @@ function Home() {
         </Link>
       </div>
 
-        <Link to="/rooms">
-          <img
-            className="findgame-button"
-            src="/homepage_image/findgame.png"
-            alt="findgame button"
-          />
-        </Link>
+      <Link to="/rooms">
+        <img
+          className="findgame-button"
+          src="/homepage_image/findgame.png"
+          alt="findgame button"
+        />
+      </Link>
+
+      <Link to="/soundtesting">
         <img
           className="soundtesting-button"
           src="/homepage_image/soundtesting.png"
           alt="soundtesting button"
         />
-        <img
-          className="changebg-button"
-          src="/homepage_image/changebg.png"
-          alt="changebg button"
-        />
-      </div>
-
+      </Link>
+      <img
+        className="changebg-button"
+        src="/homepage_image/changebg.png"
+        alt="changebg button"
+      />
+    </div>
   );
 }
 export default Home;

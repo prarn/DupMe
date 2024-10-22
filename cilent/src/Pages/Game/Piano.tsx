@@ -131,7 +131,6 @@ function Piano() {
 
         <div className="gameplay">
           <div className="sequence-boxes">
-            Received Notes
             {noteList_Received.map((item) => (
               <div key={item.id} className={`sequence note`}>
                 {item.note}
@@ -140,7 +139,6 @@ function Piano() {
           </div>
 
           <div className="sequence-boxes">
-            Send Notes
             {noteList.map((item) => (
               <div key={item.id} className={`sequence note`}>
                 {item.note}
