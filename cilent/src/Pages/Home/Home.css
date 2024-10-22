@@ -1,0 +1,22 @@
+.home-menu{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+.dupme-logo {
+    width: 1300px;
+    height: auto;/
+  }
+.findgame-button{
+    width: 250px;
+    height: auto;
+}
+.soundtesting-button{
+    width: 350px
+}
+
+.changebg-button{
+    width: 450px;
+}

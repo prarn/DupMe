@@ -2,67 +2,99 @@ import { useEffect, useState } from "react";
 import socket from "../../socket";
 import { useNavigate } from "react-router-dom";
 import UserModal from "./UserModal";
+import "./Rooms.css";
+import { Link } from "react-router-dom";
+import Lobby from "./Lobby";
 
 function Rooms() {
-    const navigate = useNavigate();
-    const [userCreated, setUserCreated] = useState(false); // Tracks if user is created
-    const [rooms, setRooms] = useState<{ roomId: string, players: number }[]>([]);
+  const navigate = useNavigate();
+  const [userCreated, setUserCreated] = useState(false); // Tracks if user is created
+  const [rooms, setRooms] = useState<{ roomId: string; players: number }[]>([]);
 
-    // Handle when create room button is clicked
-    const handleCreateRoom = () => {
-        if (userCreated) {
-            socket.emit('create_room');
-        } else {
-            alert("Please enter your username first!");
-        }
+  // Handle when create room button is clicked
+  const handleCreateRoom = () => {
+    if (userCreated) {
+      socket.emit("create_room");
+    } else {
+      alert("Please enter your username first!");
     }
+  };
 
-    // Update rooms and alert when full
-    useEffect(() => {
-        socket.on('update_rooms', (data) => {
-            setRooms(data);
-        })
-        socket.on('alert_roomfull',() => {
-            alert("Room slot is full!");
-        })
-        return () => {
-            socket.off('update_rooms');
-            socket.off('alert_roomfull');
-        }
-    },[])
+  // Update rooms and alert when full
+  useEffect(() => {
+    socket.on("update_rooms", (data) => {
+      setRooms(data);
+    });
+    socket.on("alert_roomfull", () => {
+      alert("Room slot is full!");
+    });
+    return () => {
+      socket.off("update_rooms");
+      socket.off("alert_roomfull");
+    };
+  }, []);
 
-    // Handle when players join the room
-    const handleJoin = (item: string) => {
-        if (userCreated) {
-            console.log(`Want to join ${item}`);
-            socket.emit('join_room', item);
-            navigate('/piano');
-        } else {
-            alert("Please enter your username first!");
-        }
+  // Handle when players join the room
+  const handleJoin = (item: string) => {
+    if (userCreated) {
+      console.log(`Want to join ${item}`);
+      socket.emit("join_room", item);
+      navigate("/piano");
+    } else {
+      alert("Please enter your username first!");
     }
+  };
 
-    return (
-        <div>
-            {/* {!userCreated && ( */}
-                <UserModal setUserCreated={setUserCreated} />
-            {/* )} */}
-            
-            {/* {userCreated && ( */}
-                <>
-                    <button onClick={handleCreateRoom}>Create Room</button>
-                    {rooms.map((item) => (
-                        <div
-                            key={item.roomId}
-                            onClick={() => { handleJoin(item.roomId); }}
-                        >
-                            <div>{item.roomId}</div>
-                            <div>{item.players} players</div>
-                        </div>
-                    ))}
-                </>
-            {/* )} */}
-        </div>
-    )
+  return (
+    <div className="main-container">
+      <div className="header">
+        <img
+          onClick={handleCreateRoom}
+          className="createlobby-button"
+          src="/rooms_image/createlobby.png"
+          alt="createlobby button"
+        />
+      </div>
+
+      <div className="no-lobby-banner">
+        No Lobby
+      </div>
+
+      <Lobby/>
+
+      <div className="user-modal">
+        {/* {!userCreated && ( */}
+        {/* <UserModal setUserCreated={setUserCreated} /> */}
+        {/* )} */}
+      </div>
+
+      <div className="mainmenu-button">
+        <Link to="/">
+          <img
+            className="mainmenu-button"
+            src="/MainMenu.png"
+            alt="mainmenu button"
+          />
+        </Link>
+      </div>
+
+      {/* {userCreated && ( */}
+      <>
+        {/* <button onClick={handleCreateRoom}>Create Room</button> */}
+        {rooms.map((item) => (
+          <div
+            key={item.roomId}
+            onClick={() => {
+              handleJoin(item.roomId);
+            }}
+          >
+            <div>{item.roomId}</div>
+            <div>{item.players} players</div>
+          </div>
+        ))}
+      </>
+      {/* )} */}
+    </div>
+  );
 }
 export default Rooms;

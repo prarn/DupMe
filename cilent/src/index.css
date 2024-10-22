@@ -1,0 +1,8 @@
+body, html {
+  background: url('/background.png') no-repeat center center fixed;
+  font-family: 'Pixelify Sans', sans-serif;  /* Universal font */
+  
+}
+button {
+  font-family: 'Pixelify Sans', sans-serif;
+}

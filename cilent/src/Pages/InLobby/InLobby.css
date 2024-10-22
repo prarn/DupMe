@@ -1,0 +1,77 @@
+/* Overall Game Container */
+.inlobby-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100vh;
+  padding: 20px;
+  width: 1400px;
+}
+
+/* Player Card Styling */
+.player-card {
+  background-color: #f9dcb6;
+  border-radius: 10px;
+  padding: 20px;
+  width: 400px;
+  height: 500px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.player-card h2 {
+  font-size: 36px;
+}
+
+/* Instrument Placeholder */
+.instrument-placeholder {
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.placeholder-text {
+  font-size: 18px;
+  color: #000;
+}
+
+.instrument-icon {
+  width: 300px;
+}
+
+/* Status Text */
+.status-ready {
+  color: #a5cb60;
+  font-size: 36px;
+}
+
+.status-not-ready {
+  color: #e94f4f;
+  font-size: 36px;
+}
+
+/* Center Controls */
+.center-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.ready-button,
+.howtoplay-button {
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.wait-text {
+  color: #ffffff;
+  margin-bottom: 10px;
+  font-size: 36px;
+  margin-top: 0px;
+}

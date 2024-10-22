@@ -1,0 +1,40 @@
+.main-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around; /* Start aligning from the top */
+    align-items: center;
+    height: 100vh; 
+}
+
+.header {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.createlobby-button {
+    width: 350px;
+    cursor: pointer;
+}
+
+.no-lobby-banner {
+    position: fixed;
+    top: 40%;
+    background-color: #655454;
+    opacity: 0.82;
+    width: 100vw;
+    height: 175px;
+    color: white;
+    font-size: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.mainmenu-button{
+    width: 300px;
+    margin-bottom: 30px;
+    cursor: pointer;
+}
