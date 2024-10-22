@@ -27,7 +27,7 @@ function UserModal({
             onChange={(e) => setUsername(e.target.value)}
             placeholder="Enter your name"
           />
-          <button onClick={handleSubmit}>Submit</button>
+          <button className="submit-button"onClick={handleSubmit}>Submit</button>
         </div>
       </div>
     </>

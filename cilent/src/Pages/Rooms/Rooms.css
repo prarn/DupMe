@@ -33,6 +33,11 @@
     text-align: center;
 }
 
+.lobby-slot{
+    display: flex;
+    gap: 180px;
+}
+
 .mainmenu-button{
     width: 300px;
     margin-bottom: 30px;

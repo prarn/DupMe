@@ -17,9 +17,7 @@ function App() {
         <Route path='/soundtesting' element={<SoundTesting />} />
         <Route path='/inlobby' element={<InLobby />} />
         <Route path='/select' element={<Select />} />
-
-
-        {/* <Route path="*" element={<Page404 />} /> */}
+        <Route path="*" element={<Page404 />} />
       </Routes>
     </div>
   );

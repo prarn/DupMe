@@ -35,10 +35,10 @@ function Rooms() {
   }, []);
 
   // Handle when players join the room
-  const handleJoin = (item: string) => {
+  const handleJoin = (roomId: string) => {
     if (userCreated) {
-      console.log(`Want to join ${item}`);
-      socket.emit("join_room", item);
+      console.log(`Joining room ${roomId}`);
+      socket.emit("join_room", roomId);
       navigate("/piano");
     } else {
       alert("Please enter your username first!");
@@ -56,16 +56,26 @@ function Rooms() {
         />
       </div>
 
-      <div className="no-lobby-banner">
-        No Lobby
-      </div>
+      {/* Conditionally show 'No Lobby' banner only if there are no rooms */}
+      {rooms.length === 0 && <div className="no-lobby-banner">No Lobby</div>}
 
-      <Lobby/>
+      {/* Only render UserModal if user is not created */}
+      {!userCreated && (
+        <div className="user-modal">
+          <UserModal setUserCreated={setUserCreated} />
+        </div>
+      )}
 
-      <div className="user-modal">
-        {/* {!userCreated && ( */}
-        {/* <UserModal setUserCreated={setUserCreated} /> */}
-        {/* )} */}
+      <div className="lobby-slot">
+        {userCreated &&
+          rooms.map((item) => (
+            <Lobby
+              key={item.roomId}
+              roomId={item.roomId}
+              players={item.players}
+              handleJoin={handleJoin} // Pass the join functionality to each Lobby
+            />
+          ))}
       </div>
 
       <div className="mainmenu-button">
@@ -77,24 +87,8 @@ function Rooms() {
           />
         </Link>
       </div>
-
-      {/* {userCreated && ( */}
-      <>
-        {/* <button onClick={handleCreateRoom}>Create Room</button> */}
-        {rooms.map((item) => (
-          <div
-            key={item.roomId}
-            onClick={() => {
-              handleJoin(item.roomId);
-            }}
-          >
-            <div>{item.roomId}</div>
-            <div>{item.players} players</div>
-          </div>
-        ))}
-      </>
-      {/* )} */}
     </div>
   );
 }
+
 export default Rooms;

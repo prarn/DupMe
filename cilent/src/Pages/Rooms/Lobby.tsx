@@ -1,12 +1,20 @@
 import React from "react";
 import "./Lobby.css";
 
-const Lobby: React.FC = () => {
+interface LobbyProps {
+  roomId: string;
+  players: number;
+  handleJoin: (roomId: string) => void; // Prop for the join functionality
+}
+
+const Lobby: React.FC<LobbyProps> = ({ roomId, players, handleJoin }) => {
   return (
     <div className="lobby-container">
-      <div className="lobby-header">Lobby 2</div>
-      <div className="lobby-players">0/2 Players</div>
-      <button className="lobby-join">Join</button>
+      <div className="lobby-header">Lobby {roomId}</div>
+      <div className="lobby-players">{players}/2 Players</div>
+      <button className="lobby-join" onClick={() => handleJoin(roomId)}>
+        Join
+      </button>
     </div>
   );
 };
