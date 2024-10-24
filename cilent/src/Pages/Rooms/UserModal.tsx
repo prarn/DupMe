@@ -17,7 +17,7 @@ function UserModal({
   };
 
   return (
-    <>
+    <> 
       <div className="modal-overlay">
         <div className="modal-content">
           <h2>Name:</h2>
