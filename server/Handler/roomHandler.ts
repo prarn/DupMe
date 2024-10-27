@@ -4,6 +4,9 @@ import { rooms, users } from '../dataStorage';
 let roomCounter = 1;
 
 function roomHandler(io: Server, socket: Socket) {
+    const requestRooms = () => {
+        socket.emit("update_rooms", rooms); // Send existing rooms to the client
+    };
     const createRoom = () => {
         if (rooms.length < 3) {
             rooms.push({
@@ -75,16 +78,18 @@ function roomHandler(io: Server, socket: Socket) {
         }
     };
 
+    socket.on("request_rooms", requestRooms);
     socket.on('create_room',createRoom);
-    // socket.on('delete_room',deleteRoom);
+    socket.on('delete_room',deleteRoom);
     socket.on('join_room',joinRoom)
     socket.on('leave_room',leaveRoom)
 
     return () => {
+        socket.off("request_rooms", requestRooms);
         socket.off('create_room',createRoom);
-        // socket.off('delete_room',deleteRoom);
+        socket.off('delete_room',deleteRoom);
         socket.off('join_room',joinRoom)
-        socket.on('leave_room',leaveRoom)
+        socket.off('leave_room',leaveRoom)
     }
 }
 

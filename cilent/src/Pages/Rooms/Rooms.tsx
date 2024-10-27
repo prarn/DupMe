@@ -22,17 +22,21 @@ function Rooms() {
 
   // Update rooms and alert when full
   useEffect(() => {
+    socket.emit("request_rooms");
+
     socket.on("update_rooms", (data) => {
       setRooms(data);
     });
+
     socket.on("alert_roomfull", () => {
       alert("Room slot is full!");
     });
+
     return () => {
       socket.off("update_rooms");
       socket.off("alert_roomfull");
     };
-  }, []);
+  },);
 
   // Handle when players join the room
   const handleJoin = (roomId: string) => {

@@ -10,9 +10,9 @@ function Piano() {
     >([]);
     const [countdown, setCountdown] = useState(10);
 
-  const [currentPlayer, setCurrentPlayer] = useState(1);
-  const [player1Score, setPlayer1Score] = useState(0);
-  const [player2Score, setPlayer2Score] = useState(0);
+  const [currentPlayer, ] = useState(1);
+  const [player1Score, ] = useState(0);
+  const [player2Score, ] = useState(0);
 
   const handleClickKeys = (item: string) => {
     if (noteList.length < 5) {
@@ -67,7 +67,7 @@ function Piano() {
       socket.off("countdown_update");
       socket.off("countdown_finished");
     };
-  }, []);
+  },);
 
   useEffect(() => {
     const receiveNotes = (data: { id: number; note: string }[]) => {
