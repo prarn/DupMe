@@ -13,7 +13,13 @@ function gameHandler(io:Server, socket: Socket) {
         }
     };
 
-    const startCountdown = (roomId: string, duration: number) => {
+    const startCountdown = (duration: number) => {
+        const user = users.find(user => user.sid === socket.id);
+        if (!user || !user.roomId) {
+            console.error("Room ID not found for user.");
+            return;
+        }
+        const roomId = user.roomId;
         let countdown = duration;
 
         const interval = setInterval(() => {
@@ -34,8 +40,8 @@ function gameHandler(io:Server, socket: Socket) {
     };
 
     socket.on("send_noteslist",sendNoteList);
-    socket.on("start_game", (roomId: string, duration: number) => {
-        startCountdown(roomId, duration);
+    socket.on("start_game", (duration: number) => {
+        startCountdown(duration);
     });
 
     return () =>{

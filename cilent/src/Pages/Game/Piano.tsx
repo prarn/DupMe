@@ -3,12 +3,10 @@ import socket from "../../socket";
 import "./Piano.css";
 
 function Piano() {
-    const notes = ["C", "D", "E", "F", "G", "A", "B"];
-    const [noteList, setNoteList] = useState<{ id: number; note: string }[]>([]);
-    const [noteList_Received, setNoteList_Received] = useState<
-      { id: number; note: string }[]
-    >([]);
-    const [countdown, setCountdown] = useState(10);
+  const notes = ["C", "D", "E", "F", "G", "A", "B"];
+  const [noteList, setNoteList] = useState<{ id: number; note: string }[]>([]);
+  const [noteList_Received, setNoteList_Received] = useState< { id: number; note: string }[]>([]);
+  const [countdown, setCountdown] = useState(10);
 
   const [currentPlayer, ] = useState(1);
   const [player1Score, ] = useState(0);
@@ -47,9 +45,9 @@ function Piano() {
   };
 
   const handleCreate = () => {
-    if (countdown <= 0) {
-      setCountdown(10);
-    }
+    // if (countdown <= 0) {
+    //   setCountdown(10);
+    // }
     socket.emit("start_game", countdown);
   };
 
@@ -130,13 +128,13 @@ function Piano() {
         </div>
 
         <div className="gameplay">
-          <div className="sequence-boxes">
+          {/* <div className="sequence-boxes">
             {noteList_Received.map((item) => (
               <div key={item.id} className={`sequence note`}>
                 {item.note}
               </div>
             ))}
-          </div>
+          </div> */}
 
           <div className="sequence-boxes">
             {noteList.map((item) => (
