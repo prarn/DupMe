@@ -1,11 +1,11 @@
 import { Server, Socket } from "socket.io";
-import { rooms, users } from "../dataStorage";
+import { users } from "../dataStorage";
 
 function gameHandler(io:Server, socket: Socket) {
     const sendNoteList = (data: any) => {
         const user = users.find(user => user.sid === socket.id);
         if (user) {
-            socket.to(user.roomId).emit('receive_noteslist', data.noteList);
+            socket.to(user.roomId).emit('receive_noteslist', data);
             io.to(user.roomId).emit('countdown_finished', { countdown: 0 });
             console.log('Note list sent to room:', user.roomId);
         } else {
@@ -39,13 +39,16 @@ function gameHandler(io:Server, socket: Socket) {
         });
     };
 
-    socket.on("send_noteslist",sendNoteList);
-    socket.on("start_game", (duration: number) => {
-        startCountdown(duration);
+    socket.on("send_noteslist", sendNoteList);
+    socket.on("start_game", ({ duration }) => {
+        startCountdown(duration);   // Start new countdown
+        const user = users.find(user => user.sid === socket.id);
+        if (user) io.to(user.roomId).emit("game_reset"); // Notify clients to reset their UI
     });
+    
 
     return () =>{
-        socket.off("send_noteslist",sendNoteList);
+        socket.off("send_noteslist", sendNoteList);
     }
 }
 export default gameHandler;

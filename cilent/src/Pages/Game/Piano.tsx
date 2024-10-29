@@ -8,7 +8,7 @@ function Piano() {
   const [noteList_Received, setNoteList_Received] = useState< { id: number; note: string }[]>([]);
   const [countdown, setCountdown] = useState(10);
 
-  const [currentPlayer, ] = useState(1);
+  const [currentPlayer, ] = useState(true);
   const [player1Score, ] = useState(0);
   const [player2Score, ] = useState(0);
 
@@ -45,11 +45,12 @@ function Piano() {
   };
 
   const handleCreate = () => {
-    // if (countdown <= 0) {
-    //   setCountdown(10);
-    // }
-    socket.emit("start_game", countdown);
+    setCountdown(10);           // Reset the countdown
+    setNoteList([]);            // Clear the local note list
+    setNoteList_Received([]);   // Clear received notes
+    socket.emit("start_game", { duration: 10 });  // Emit restart signal to backend
   };
+  
 
   useEffect(() => {
     socket.on("countdown_update", (data) => {
@@ -109,7 +110,7 @@ function Piano() {
               <div className="timer">{countdown}</div>
             </div>
             <div className="turn-pointer">
-              {currentPlayer === 1 ? (
+              {currentPlayer === true ? (
                 <img src="/gamepage_image/turn-left.png" alt="turn-left" />
               ) : (
                 <img src="/gamepage_image/turn-right.png" alt="turn-right" />
