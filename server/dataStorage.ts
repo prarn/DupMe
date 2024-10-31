@@ -12,4 +12,5 @@ export let rooms: {
     roomId: string,
     round: number, 
     players: number
+    turnDirection: "left" | "right";
 }[] = [];

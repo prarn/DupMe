@@ -1,3 +1,5 @@
+// Piano.tsx
+
 import { useEffect, useState } from "react";
 import socket from "../../socket";
 import "./Piano.css";
@@ -5,12 +7,12 @@ import "./Piano.css";
 function Piano() {
   const notes = ["C", "D", "E", "F", "G", "A", "B"];
   const [noteList, setNoteList] = useState<{ id: number; note: string }[]>([]);
-  const [noteList_Received, setNoteList_Received] = useState< { id: number; note: string }[]>([]);
+  const [noteList_Received, setNoteList_Received] = useState<{ id: number; note: string }[]>([]);
   const [countdown, setCountdown] = useState(10);
-
-  const [currentPlayer, ] = useState(true);
-  const [player1Score, ] = useState(0);
-  const [player2Score, ] = useState(0);
+  
+  const [currentPlayer, setCurrentPlayer] = useState(true); // State to manage current player
+  const [player1Score, setPlayer1Score] = useState(0);
+  const [player2Score, setPlayer2Score] = useState(0);
 
   const handleClickKeys = (item: string) => {
     if (noteList.length < 5) {
@@ -38,6 +40,11 @@ function Piano() {
       socket.emit("send_noteslist", noteList);
       setNoteList([]);
     }
+
+    // After submitting, update the current player
+    const newPlayerState = !currentPlayer; // Toggle between true and false
+    setCurrentPlayer(newPlayerState);
+    socket.emit("update_current_player", newPlayerState); // Emit the new current player state
   };
 
   const handleReset = () => {
@@ -45,12 +52,11 @@ function Piano() {
   };
 
   const handleCreate = () => {
-    setCountdown(10);           // Reset the countdown
-    setNoteList([]);            // Clear the local note list
-    setNoteList_Received([]);   // Clear received notes
-    socket.emit("start_game", { duration: 10 });  // Emit restart signal to backend
+    setCountdown(10); // Reset the countdown
+    setNoteList([]); // Clear the local note list
+    setNoteList_Received([]); // Clear received notes
+    socket.emit("start_game", { duration: 10 }); // Emit restart signal to backend
   };
-  
 
   useEffect(() => {
     socket.on("countdown_update", (data) => {
@@ -62,11 +68,16 @@ function Piano() {
       handleSubmit();
     });
 
+    socket.on("current_player_updated", (player) => {
+      setCurrentPlayer(player); // Update the current player based on the emitted event
+    });
+
     return () => {
       socket.off("countdown_update");
       socket.off("countdown_finished");
+      socket.off("current_player_updated"); // Clean up listener
     };
-  },);
+  }, []);
 
   useEffect(() => {
     const receiveNotes = (data: { id: number; note: string }[]) => {
@@ -110,7 +121,7 @@ function Piano() {
               <div className="timer">{countdown}</div>
             </div>
             <div className="turn-pointer">
-              {currentPlayer === true ? (
+              {currentPlayer ? (
                 <img src="/gamepage_image/turn-left.png" alt="turn-left" />
               ) : (
                 <img src="/gamepage_image/turn-right.png" alt="turn-right" />
@@ -129,14 +140,6 @@ function Piano() {
         </div>
 
         <div className="gameplay">
-          {/* <div className="sequence-boxes">
-            {noteList_Received.map((item) => (
-              <div key={item.id} className={`sequence note`}>
-                {item.note}
-              </div>
-            ))}
-          </div> */}
-
           <div className="sequence-boxes">
             {noteList.map((item) => (
               <div key={item.id} className={`sequence note`}>
@@ -186,3 +189,8 @@ function Piano() {
 }
 
 export default Piano;
+
+
+
+
+
