@@ -1,16 +1,21 @@
 import { useEffect, useState } from "react";
 import socket from "../../socket";
 import "./Piano.css";
+import Me from "./Me";
+import Opponent from "./Opponent";
+import InstrumentSelect from "./InstrumenrSelect";
 
 function Piano() {
   const notes = ["C", "D", "E", "F", "G", "A", "B"];
   const [noteList, setNoteList] = useState<{ id: number; note: string }[]>([]);
-  const [noteList_Received, setNoteList_Received] = useState< { id: number; note: string }[]>([]);
+  const [noteList_Received, setNoteList_Received] = useState<
+    { id: number; note: string }[]
+  >([]);
   const [countdown, setCountdown] = useState(10);
 
-  const [currentPlayer, ] = useState(true);
-  const [player1Score, ] = useState(0);
-  const [player2Score, ] = useState(0);
+  const [currentPlayer] = useState(true);
+  const [player1Score] = useState(0);
+  const [player2Score] = useState(0);
 
   const handleClickKeys = (item: string) => {
     if (noteList.length < 5) {
@@ -45,12 +50,11 @@ function Piano() {
   };
 
   const handleCreate = () => {
-    setCountdown(10);           // Reset the countdown
-    setNoteList([]);            // Clear the local note list
-    setNoteList_Received([]);   // Clear received notes
-    socket.emit("start_game", { duration: 10 });  // Emit restart signal to backend
+    setCountdown(10); // Reset the countdown
+    setNoteList([]); // Clear the local note list
+    setNoteList_Received([]); // Clear received notes
+    socket.emit("start_game", { duration: 10 }); // Emit restart signal to backend
   };
-  
 
   useEffect(() => {
     socket.on("countdown_update", (data) => {
@@ -66,7 +70,7 @@ function Piano() {
       socket.off("countdown_update");
       socket.off("countdown_finished");
     };
-  },);
+  });
 
   useEffect(() => {
     const receiveNotes = (data: { id: number; note: string }[]) => {
@@ -88,19 +92,16 @@ function Piano() {
   return (
     <>
       <div className="top">
-        <button className="start" onClick={handleCreate}>Start</button>
+        <button className="start" onClick={handleCreate}>
+          Start
+        </button>
         <p></p>
       </div>
 
       <div className="game-container">
         <div className="header">
-          <div className="user user1">
-            <div className="user-and-score">
-              <h2>User 1</h2>
-              <div className="score">{player1Score}</div>
-              <h3>Score</h3>
-            </div>
-            <img src="/Instruments/piano.png" alt="piano" />
+          <div className="me">
+            <Me />
           </div>
 
           <div className="time">
@@ -118,13 +119,8 @@ function Piano() {
             </div>
           </div>
 
-          <div className="user user2">
-            <img src="/Instruments/trumpet.png" alt="trumpet" />
-            <div className="user-and-score">
-              <h2>User 2</h2>
-              <div className="score">{player2Score}</div>
-              <h3>Score</h3>
-            </div>
+          <div className="opponent">
+            <Opponent />
           </div>
         </div>
 
@@ -179,6 +175,9 @@ function Piano() {
           <button className="reset" onClick={handleReset}>
             Reset
           </button>
+        </div>
+        <div className="instrument-select">
+          <InstrumentSelect />
         </div>
       </div>
     </>
