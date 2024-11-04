@@ -1,90 +1,3 @@
-body {
-  background-color: #5e2d2f;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
-.top{
-    display: flex;
-    justify-content: center;
-    margin-bottom: 10px;
-}
-.start{
-    padding: 10px;
-  background-color: #ffe0b5;
-  color: #462521;
-  border: none;
-  cursor: pointer;
-  font-size: 30px;
-}
-.game-container {
-  width: 170vh;
-  height: 90vh;
-  padding: 10px;
-  background-color: #462521;
-  text-align: center;
-}
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.me, .opponent {
-  width: 40%;
-  height: 200px;
-}
-
-.user {
-  width: 40%;
-  height: 35vh;
-  background-color: #ffe0b5;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-}
-
-.user-and-score {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.user-and-score h3 {
-  margin: 0px;
-  color: #462521;
-  font-size: 45px;
-}
-
-.user h2 {
-  font-size: 60px;
-  color: #462521;
-  margin: 0;
-}
-
-.user img {
-  width: 250px;
-  height: 250px;
-  margin-top: 20px;
-}
-
-.score {
-  font-size: 90px;
-  margin: 0px;
-  color: black;
-  background-color: #d9d9d9;
-}
-
-.time {
-  width: 17%;
-  height: 285px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-}
-
 .time .turn {
   color: #ffe0b5;
   font-size: 40px;
@@ -116,7 +29,8 @@ body {
 }
 
 .timer-background img {
-  width: 75%;
+  margin-top: 10px;
+  width: 70%;
 }
 
 .turn-pointer {
@@ -128,6 +42,7 @@ body {
 .turn-pointer img {
   width: 150px;
 }
+
 .gameplay {
   margin-bottom: 10px;
   margin-top: 50px;
@@ -173,7 +88,7 @@ body {
   border-color: #826c34;
 }
 .reset,
-.replay{
+.replay {
   padding: 10px;
   background-color: #ffe0b5;
   color: #462521;
@@ -231,8 +146,4 @@ body {
 .piano-keys .white-key:nth-child(3)::before,
 .piano-keys .white-key:nth-child(7)::before {
   display: none; /* No black key above E and B */
-}
-
-.instrument-select{
-  margin-top: 10px;
 }

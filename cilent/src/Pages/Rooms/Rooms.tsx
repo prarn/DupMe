@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import socket from "../../socket";
 import { useNavigate } from "react-router-dom";
-import UserModal from "./UserModal";
+import UserModal from "../../components/UserModal/UserModal";
 import "./Rooms.css";
 import { Link } from "react-router-dom";
-import Lobby from "./Lobby";
+import Lobby from "../../components/Lobby/Lobby";
 
 function Rooms() {
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ function Rooms() {
       socket.off("update_rooms");
       socket.off("alert_roomfull");
     };
-  },);
+  });
 
   // Handle when players join the room
   const handleJoin = (roomId: string) => {

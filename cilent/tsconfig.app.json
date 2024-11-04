@@ -20,5 +20,5 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "src/Pages/Game/Piano.tsx"]
+  "include": ["src", "src/Pages/Game/Game.tsx"]
 }
