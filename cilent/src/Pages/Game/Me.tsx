@@ -1,19 +1,34 @@
-import React, { useEffect, useState } from "react";
+// Me.tsx
+
+import { useEffect, useState } from "react";
 import socket from "../../socket";
 import "./PlayerCard.css";
 
 function Me() {
   const [name, setName] = useState<string>();
-  const [avatar, setAvatar] = useState<string>();
   const [score, setScore] = useState(0);
+  // const [avatar, setAvatar] = useState<string>();
   const [myInstrument, setMyInstrument] = useState<string>();
 
   useEffect(() => {
     socket.on("me", (data) => {
       setName(data.username);
-      setAvatar(data.avatar);
+      setScore(data.score);
+      // setAvatar(data.avatar);
+      setMyInstrument(data.instrument);
     });
-  }, [socket]);
+
+    socket.on("score_updated", (data) => {
+      if (data.playerId === socket.id) {
+          setScore(data.score); // Update score for the current player
+      }
+    });
+
+    return () => {
+      socket.off("me");
+      socket.off("score_updated"); // Clean up listener
+    };
+  });
 
   return (
     <>
@@ -26,11 +41,11 @@ function Me() {
           <h3>Score</h3>
         </div>
         <img className="instrument" src="/Instruments/piano.png" alt="piano" />
-        {/* <img
+        <img
             src={myInstrument}
             alt="myInstrument"
             className="instrument-icon"
-          /> */}
+          />
       </div>
     </>
   );

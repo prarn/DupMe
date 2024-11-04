@@ -1,3 +1,5 @@
+//gameHandler.ts
+
 import { Server, Socket } from "socket.io";
 import { users } from "../dataStorage";
 
@@ -7,12 +9,14 @@ function gameHandler(io:Server, socket: Socket) {
         if (user) {
             socket.to(user.roomId).emit('receive_noteslist', data);
             io.to(user.roomId).emit('countdown_finished', { countdown: 0 });
+            io.to(user.roomId).emit("current_player_updated", false); // Switch to Player 2
+            startCountdown(20); // Start 20-second countdown for Player 2
             console.log('Note list sent to room:', user.roomId);
         } else {
             console.log('User not found in any room');
         }
     };
-
+    
     const startCountdown = (duration: number) => {
         const user = users.find(user => user.sid === socket.id);
         if (!user || !user.roomId) {
