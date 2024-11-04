@@ -1,3 +1,4 @@
+//dataStorage.ts
 export let users: {
     sid: string, 
     username: string,
@@ -12,4 +13,5 @@ export let rooms: {
     roomId: string,
     round: number, 
     players: number
+    turnDirection: "left" | "right";
 }[] = [];

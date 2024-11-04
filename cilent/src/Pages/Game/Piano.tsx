@@ -1,3 +1,5 @@
+// Piano.tsx
+
 import { useEffect, useState } from "react";
 import socket from "../../socket";
 import "./Piano.css";
@@ -5,12 +7,12 @@ import "./Piano.css";
 function Piano() {
   const notes = ["C", "D", "E", "F", "G", "A", "B"];
   const [noteList, setNoteList] = useState<{ id: number; note: string }[]>([]);
-  const [noteList_Received, setNoteList_Received] = useState< { id: number; note: string }[]>([]);
+  const [noteList_Received, setNoteList_Received] = useState<{ id: number; note: string }[]>([]);
   const [countdown, setCountdown] = useState(10);
-
-  const [currentPlayer, ] = useState(true);
-  const [player1Score, ] = useState(0);
-  const [player2Score, ] = useState(0);
+  
+  const [currentPlayer, setCurrentPlayer] = useState(true); // true for Player 1, false for Player 2
+  const [player1Score, setPlayer1Score] = useState(0);
+  const [player2Score, setPlayer2Score] = useState(0);
 
   const handleClickKeys = (item: string) => {
     if (noteList.length < 5) {
@@ -31,12 +33,13 @@ function Piano() {
   };
 
   const handleSubmit = () => {
-    if (countdown > 0) {
-      socket.emit("stop_countdown");
-    }
-    if (noteList.length > 0) {
-      socket.emit("send_noteslist", noteList);
-      setNoteList([]);
+    if (currentPlayer) { // Player 1's turn
+      if (noteList.length > 0) {
+        socket.emit("send_noteslist", noteList); // Send notes to server
+        setNoteList([]);
+      }
+    } else { // Player 2's turn
+      handleSecondPlayerSubmit(); // Process Player 2's submission
     }
   };
 
@@ -45,12 +48,21 @@ function Piano() {
   };
 
   const handleCreate = () => {
-    setCountdown(10);           // Reset the countdown
-    setNoteList([]);            // Clear the local note list
-    setNoteList_Received([]);   // Clear received notes
-    socket.emit("start_game", { duration: 10 });  // Emit restart signal to backend
+    setCountdown(10);
+    setNoteList([]);
+    setNoteList_Received([]);
+    setPlayer1Score(0);
+    setPlayer2Score(0);
+    socket.emit("start_game", { duration: 10 }); // Start game and initialize scores
   };
-  
+
+  const handleSecondPlayerSubmit = () => {
+    const pointsEarned = noteList.reduce((points, note, index) => {
+      return note.note === noteList_Received[index]?.note ? points + 1 : points;
+    }, 0);
+    socket.emit("score_points", pointsEarned); // Send points earned to server
+    setNoteList([]); // Reset the note list for the next round
+  };
 
   useEffect(() => {
     socket.on("countdown_update", (data) => {
@@ -62,11 +74,26 @@ function Piano() {
       handleSubmit();
     });
 
+    socket.on("current_player_updated", (isPlayer1) => {
+      setCurrentPlayer(isPlayer1); // Update the current player state
+    });
+
+    socket.on("update_scores", ({ player1Score, player2Score }) => {
+      setPlayer1Score(player1Score);
+      setPlayer2Score(player2Score);
+      if (player1Score >= 8 || player2Score >= 8) {
+        const winner = player1Score >= 8 ? "Player 1" : "Player 2";
+        alert(`${winner} wins!`);
+      }
+    });
+
     return () => {
       socket.off("countdown_update");
       socket.off("countdown_finished");
+      socket.off("current_player_updated");
+      socket.off("update_scores");
     };
-  },);
+  });
 
   useEffect(() => {
     const receiveNotes = (data: { id: number; note: string }[]) => {
@@ -79,11 +106,7 @@ function Piano() {
     return () => {
       socket.off("receive_noteslist", receiveNotes);
     };
-  }, [noteList_Received]);
-
-  useEffect(() => {
-    console.log(noteList);
-  }, [noteList]);
+  }, []);
 
   return (
     <>
@@ -110,7 +133,7 @@ function Piano() {
               <div className="timer">{countdown}</div>
             </div>
             <div className="turn-pointer">
-              {currentPlayer === true ? (
+              {currentPlayer ? (
                 <img src="/gamepage_image/turn-left.png" alt="turn-left" />
               ) : (
                 <img src="/gamepage_image/turn-right.png" alt="turn-right" />
@@ -129,14 +152,6 @@ function Piano() {
         </div>
 
         <div className="gameplay">
-          {/* <div className="sequence-boxes">
-            {noteList_Received.map((item) => (
-              <div key={item.id} className={`sequence note`}>
-                {item.note}
-              </div>
-            ))}
-          </div> */}
-
           <div className="sequence-boxes">
             {noteList.map((item) => (
               <div key={item.id} className={`sequence note`}>
