@@ -1,7 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './select.css';
-import { Link } from "react-router-dom";
 import socket from '../../socket';
 
 const Select: React.FC = () => {
@@ -9,7 +8,7 @@ const Select: React.FC = () => {
 
   // Specify the type of 'instrument' as string
   const handleInstrumentClick = (instrument: string) => {
-    navigate('/how-to-play', { state: { instrument } });
+    navigate('/soundtesting', { state: { instrument } });
     socket.emit('update_instrument',instrument);
   };
 
@@ -37,11 +36,16 @@ const Select: React.FC = () => {
           onClick={() => handleInstrumentClick('piano')}
         />
       </div>
-
-      <Link to='/inlobby'>
-        <button className='back-button'>Back to lobby</button>
-      </Link>
+      <div className="menu">
+        <img
+          src="/MainMenu.png"
+          alt="menu"
+          className="menu-button"
+          onClick={() => navigate('/')}  
+        />
+      </div>
     </div>
+    
   );
 };
 

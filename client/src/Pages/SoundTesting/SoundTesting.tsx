@@ -64,9 +64,7 @@ const SoundTesting: React.FC = () => {
         <div className="instrument">
           <img src={instrumentImage} alt={instrument || 'piano'} />
         </div>
-      </div>
-
-      <div className="menu">
+        <div className="menu">
         <img
           src="/MainMenu.png"
           alt="menu"
@@ -74,6 +72,9 @@ const SoundTesting: React.FC = () => {
           onClick={() => navigate('/')}  
         />
       </div>
+      </div>
+
+      
     </>
   );
 };

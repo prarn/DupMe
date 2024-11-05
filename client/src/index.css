@@ -1,8 +1,22 @@
 body, html {
-  background: url('/background.png') no-repeat center center fixed;
+  background: url('/background_image/background1.png') no-repeat center center fixed;
   font-family: 'Pixelify Sans', sans-serif;  /* Universal font */
-  
+  transition: background 0.3s ease; /* Smooth transition for background change */
 }
+
 button {
   font-family: 'Pixelify Sans', sans-serif;
+}
+
+/* New classes for background changes */
+.background-1 {
+  background: url('/background_image/background1.png') no-repeat center center fixed;
+}
+
+.background-2 {
+  background: url('/background_image/background2.png') no-repeat center center fixed;
+}
+
+.background-3 {
+  background: url('/background_image/background3.png') no-repeat center center fixed;
 }

@@ -22,18 +22,20 @@ function Home() {
         />
       </Link>
 
-      <Link to="/soundtesting">
+      <Link to="/select">
         <img
           className="soundtesting-button"
           src="/homepage_image/soundtesting.png"
           alt="soundtesting button"
         />
-      </Link>
+      </Link >
+      <Link to="/backgroundchange">
       <img
         className="changebg-button"
         src="/homepage_image/changebg.png"
         alt="changebg button"
       />
+      </Link>
     </div>
   );
 }
