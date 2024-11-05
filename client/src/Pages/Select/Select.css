@@ -34,7 +34,7 @@ body {
   /* Container for the instrument images */
   .instrument-selection {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     width: 100%; /* Ensure images are well spaced */
     max-width: 600px; /* Set a max width to limit the size */
     margin-top: 20px;

@@ -43,7 +43,7 @@ function Rooms() {
     if (userCreated) {
       console.log(`Joining room ${roomId}`);
       socket.emit("join_room", roomId);
-      navigate("/piano");
+      navigate("/avatar");
     } else {
       alert("Please enter your username first!");
     }

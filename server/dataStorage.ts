@@ -5,7 +5,7 @@ export let users: {
     instrument: string,
     score: number, 
     ready: boolean, 
-    P1: boolean
+    P1: boolean,
 }[] = [];
 
 export let rooms: {
