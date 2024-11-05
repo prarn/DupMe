@@ -6,6 +6,7 @@ import InLobby from "./Pages/InLobby/InLobby";
 import Select from "./Pages/Select/Select";
 import { Route, Routes } from "react-router-dom";
 import Rooms from "./Pages/Rooms/Rooms";
+import BackgroundChange from "./Pages/BackgroundChange/BackgroundChange";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/inlobby" element={<InLobby />} />
         <Route path="/select" element={<Select />} />
         <Route path="*" element={<Page404 />} />
+        <Route path="/backgroundchange" element={<BackgroundChange />} />
       </Routes>
     </div>
   );

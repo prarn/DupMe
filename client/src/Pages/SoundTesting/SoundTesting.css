@@ -5,41 +5,55 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    background-color: #8c564b; /* Matches border color for a unified look */
 }
+
 .container {
-    width: 1000px;
-    height: 550px;
+    width: 80vw;
+    max-width: 1200px;
+    height: 80vh;
+    max-height: 600px;
     background-color: #f1dec9;
     border: 5px solid #8c564b;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-evenly; /* Distribute space evenly */
     align-items: center;
     text-align: center;
     font-size: 30px;
+    padding: 20px;
+    box-sizing: border-box;
 }
+.container > div:first-child {
+    margin-top: -20px; /* Moves the top text up */
+}
+
 .instrument {
-    margin-top: 20px;
-}
-.instrument img {
-    width: 450px;
-}
-.menu {
     display: flex;
-    flex-direction: column; /* Stack buttons vertically */
+    justify-content: center;
     align-items: center;
-    gap: 15px; /* Space between buttons */
+}
+
+.instrument img {
+    width: 350px;
+    height: auto;
+}
+
+.menu {
     margin-top: 20px;
-  }
-  
-  /* Individual button styling - maintaining original look */
- 
+}
+
 .menu-button {
     cursor: pointer;
-    width: 200px; /* Button size */
+    width: 150px;
     height: auto;
-    background-color: #ffffff; /* White background */
-    border: 4px solid #333; /* Black border */
-    text-align: center; /* Center text in button */
+    background-color: #ffffff;
+    border: 4px solid #333;
+    text-align: center;
     padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
+
