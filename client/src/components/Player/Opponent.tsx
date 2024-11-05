@@ -1,5 +1,3 @@
-// Opponent.tsx
-
 import { useEffect, useState } from "react";
 import socket from "../../socket";
 import "./PlayerCard.css";
@@ -7,28 +5,19 @@ import "./PlayerCard.css";
 function Opponent() {
   const [name, setName] = useState<string>();
   const [score, setScore] = useState(0);
-  // const [avatar, setAvatar] = useState<string>();
   const [myInstrument, setMyInstrument] = useState<string>();
 
   useEffect(() => {
     socket.on("opponent", (data) => {
-      setName(data.username);
+      setName(data.name);
       setScore(data.score);
-      // setAvatar(data.avatar);
       setMyInstrument(data.instrument);
     });
 
-    socket.on("score_updated", (data) => {
-      if (data.playerId === socket.id) {
-          setScore(data.score); // Update score for the current player
-      }
+    socket.on("update_opponentInstrument", (data) => {
+      setMyInstrument(data.instrument);
     });
-
-    return () => {
-      socket.off("opponent");
-      socket.off("score_updated"); // Clean up listener
-    };
-  });
+  }, [socket]);
 
   return (
     <>
@@ -40,12 +29,11 @@ function Opponent() {
           <div className="myscore">{score}</div>
           <h3>Score</h3>
         </div>
-        <img className="instrument" src="/Instruments/piano.png" alt="piano" />
         <img
-            src={myInstrument}
-            alt="myInstrument"
-            className="instrument-icon"
-          />
+          className="instrument"
+          src={`/Instruments/${myInstrument}.png`}
+          alt={myInstrument}
+        />
       </div>
     </>
   );
