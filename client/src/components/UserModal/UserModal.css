@@ -1,62 +1,83 @@
 .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent background */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-  
-  .modal-content {
-    width: 1000px;
-    height: 600px;
-    background-color: #462521;
-    border: 20px solid #826C34;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-    z-index: 1001;
-  }
-  
-  h2 {
-    color: #FFFFFF;
-    margin-bottom: 40px;
-    font-size: 60px;
-  }
-  
-  input {
-    width: 80%;
-    height: 50px;
-    padding: 15px;
-    margin-bottom: 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #BDB246;
-    color: #000000;
-    font-size: 16px;
-    text-align: center;
-  }
-  
-  .submit-button{
-    background-color: #e0e0e0;
-    border: 5px solid #373F8D;
-    height: 100px;
-    width: 200px;
-    padding: 10px 20px;
-    font-size: 36px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  button:hover {
-    background-color: #C4B052; /* Olive green on hover */
-    color: #000000;
-  }
-  
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  width: 1000px;
+  height: 600px;
+  background-color: #462521;
+  border: 20px solid #826c34;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  z-index: 1001;
+}
+
+h2 {
+  color: #ffffff;
+  margin-bottom: 20px;
+  font-size: 60px;
+}
+
+input {
+  width: 80%;
+  height: 50px;
+  padding: 15px;
+  margin-bottom: 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #bdb246;
+  color: #000000;
+  font-size: 16px;
+  text-align: center;
+}
+
+.submit-button {
+  background-color: #e0e0e0;
+  border: 5px solid #373f8d;
+  height: 100px;
+  width: 200px;
+  padding: 10px 20px;
+  font-size: 36px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 25px;
+}
+
+button:hover {
+  background-color: #c4b052; /* Olive green on hover */
+  color: #000000;
+}
+
+.avatar-selection {
+  display: flex;
+  justify-content: center;
+  width: 100%; /* Ensure images are well spaced */
+  max-width: 800px; /* Increased max-width for 4 images */
+  gap: 20px; /* Add space between avatars */
+}
+
+/* Styling for each avatar image */
+.avatar-image {
+  cursor: pointer;
+  width: 150px; /* Adjust size as needed */
+  transition: transform 0.2s ease;
+}
+
+/* Hover effect for each avatar image */
+
+.active-avatar {
+  transform: scale(1.25);
+}

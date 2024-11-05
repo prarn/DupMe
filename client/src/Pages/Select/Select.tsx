@@ -1,7 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './select.css';
-import socket from '../../socket';
 
 const Select: React.FC = () => {
   const navigate = useNavigate();
@@ -9,7 +8,6 @@ const Select: React.FC = () => {
   // Specify the type of 'instrument' as string
   const handleInstrumentClick = (instrument: string) => {
     navigate('/soundtesting', { state: { instrument } });
-    socket.emit('update_instrument',instrument);
   };
 
   return (
