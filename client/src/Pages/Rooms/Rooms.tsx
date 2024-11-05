@@ -43,7 +43,7 @@ function Rooms() {
     if (userCreated) {
       console.log(`Joining room ${roomId}`);
       socket.emit("join_room", roomId);
-      navigate("/avatar");
+      navigate("/game");
     } else {
       alert("Please enter your username first!");
     }
@@ -74,10 +74,9 @@ function Rooms() {
         {userCreated &&
           rooms.map((item) => (
             <Lobby
-              key={item.roomId}
               roomId={item.roomId}
               players={item.players}
-              handleJoin={handleJoin} // Pass the join functionality to each Lobby
+              handleJoin={handleJoin}
             />
           ))}
       </div>

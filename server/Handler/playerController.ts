@@ -49,25 +49,27 @@ export function updatePlayerInRoom(
     (user) => user.roomId === roomId && user.sid !== socket.id
   );
   let myName = "";
-  let myAvatar = "";
   let myScore = 0;
   let myInstrument = "";
+  let myAvatar = "";
   let opponentName = "";
-  let opponentAvatar = "";
   let opponentScore = 0;
   let opponentInstrument = "";
+  let opponentAvatar = "";
 
   if (me) {
     // im still in the room
     myName = me.username;
     myScore = me.score;
     myInstrument = me.instrument;
+    myAvatar = me.avatar;
 
     // send my info to me
     socket.emit("me", {
       name: myName,
       score: myScore,
       instrument: myInstrument,
+      avatar: myAvatar,
     });
   }
   if (opponent) {
@@ -76,17 +78,20 @@ export function updatePlayerInRoom(
     opponentName = opponent.username;
     opponentScore = opponent.score;
     opponentInstrument = opponent.instrument;
+    opponentAvatar = opponent.avatar;
 
     // send my info to opponent
     io.to(opponentSid).emit("opponent", {
       name: myName,
       score: myScore,
       instrument: myInstrument,
+      avatar: myAvatar,
     });
     io.to(opponentSid).emit("me", {
       name: opponentName,
       score: opponentScore,
       instrument: opponentInstrument,
+      avatar: opponentAvatar,
     });
   }
   if (me && opponent) {
@@ -96,6 +101,7 @@ export function updatePlayerInRoom(
       name: opponentName,
       score: opponentScore,
       instrument: opponentInstrument,
+      avatar: opponentAvatar,
     });
   }
 }
