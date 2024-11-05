@@ -28,7 +28,6 @@ export function updatePlayerInRoom(
   const roomIndex = rooms.findIndex((room) => room.roomId === roomId);
   if (roomIndex !== -1) {
     if (rooms[roomIndex].players !== playersInRoom.length) {
-      // a player join or leave that room
       rooms[roomIndex].players = playersInRoom.length;
       rooms[roomIndex].round = 0;
       io.to(roomId).emit("restart", { round: 0 });
@@ -52,36 +51,42 @@ export function updatePlayerInRoom(
   let myName = "";
   let myAvatar = "";
   let myScore = 0;
+  let myInstrument = "";
   let opponentName = "";
   let opponentAvatar = "";
   let opponentScore = 0;
+  let opponentInstrument = "";
 
   if (me) {
     // im still in the room
     myName = me.username;
-    // myAvatar = me.avatar;
     myScore = me.score;
+    myInstrument = me.instrument;
 
     // send my info to me
-    socket.emit("me", { name: myName, score: myScore });
+    socket.emit("me", {
+      name: myName,
+      score: myScore,
+      instrument: myInstrument,
+    });
   }
   if (opponent) {
     // opponent still in the room
     const opponentSid = opponent.sid;
     opponentName = opponent.username;
-    // opponentAvatar = opponent.avatar;
     opponentScore = opponent.score;
+    opponentInstrument = opponent.instrument;
 
     // send my info to opponent
     io.to(opponentSid).emit("opponent", {
       name: myName,
-      avatar: myAvatar,
       score: myScore,
+      instrument: myInstrument,
     });
     io.to(opponentSid).emit("me", {
       name: opponentName,
-      avatar: opponentAvatar,
       score: opponentScore,
+      instrument: opponentInstrument,
     });
   }
   if (me && opponent) {
@@ -89,8 +94,8 @@ export function updatePlayerInRoom(
     // send opponent's info to me
     socket.emit("opponent", {
       name: opponentName,
-      avatar: opponentAvatar,
       score: opponentScore,
+      instrument: opponentInstrument,
     });
   }
 }
