@@ -1,7 +1,7 @@
 import { Server, Socket } from "socket.io";
 import { rooms, users } from "../dataStorage";
 
-function userHandler(io: Server, socket: Socket, roomId: string) {
+function userHandler(io: Server, socket: Socket) {
   const createUser = (data: { username: string }) => {
     const user = {
       sid: socket.id,
