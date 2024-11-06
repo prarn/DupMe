@@ -33,6 +33,14 @@ function PianoComponent() {
     audio.play();
   };
 
+  const handleReplay = async () => {
+    for (let i = 0; i < noteList_Received.length; i++) {
+      const note = noteList_Received[i].note;
+      playSound(`/notes/piano/${note.toLowerCase()}.mp3`);
+      await new Promise((resolve) => setTimeout(resolve, 500)); // 500ms delay between notes
+    }
+  };  
+
   const handleReady = () => {
     socket.emit("ready");
     setIsReady(true);
@@ -109,6 +117,7 @@ function PianoComponent() {
     })
     socket.on("start_follow", () => {
       setIsFollower(true);
+      handleReplay();
     })
 
     return () => {
@@ -170,7 +179,7 @@ function PianoComponent() {
       </div>
 
       <div className="controls">
-        <button className="replay">
+        <button className="replay" onClick={handleReplay}>
           Replay
           <img src="/gamepage_image/speaker.png" alt="speaker" />
         </button>
