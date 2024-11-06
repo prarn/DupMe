@@ -2,11 +2,8 @@ import { Server, Socket } from "socket.io";
 import { rooms, users } from "../dataStorage";
 
 function userHandler(io: Server, socket: Socket) {
-<<<<<<< HEAD
-  const createUser = (data: { username: string }) => {
-=======
+
   const createUser = (data: { username: string; avatar: string }) => {
->>>>>>> 9b2901e74953c672fec78d258e194753995b4a2d
     const user = {
       sid: socket.id,
       username: data.username,
