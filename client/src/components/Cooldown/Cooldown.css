@@ -1,0 +1,14 @@
+.cooldown-banner {
+    position: fixed;
+    top: 40%;
+    background-color: #655454;
+    opacity: 0.82;
+    width: 100vw;
+    height: 175px;
+    color: white;
+    font-size: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}

@@ -1,18 +1,15 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import socket from "../../socket";
 import "./PianoComponent.css";
 
 function PianoComponent() {
   const notes = ["C", "D", "E", "F", "G", "A", "B"];
   const [noteList, setNoteList] = useState<{ id: number; note: string }[]>([]);
-  const [noteList_Received, setNoteList_Received] = useState<
-    { id: number; note: string }[]
-  >([]);
+  const [noteList_Received, setNoteList_Received] = useState<{ id: number; note: string }[]>([]);
 
-  const [isReady, setIsReady] = useState(false); // data from the server
-  const [opponentReady, setOpponentReady] = useState(false);
   const [countdown, setCountdown] = useState(10);
   const [currentPlayer, setCurrentPlayer] = useState(true);
+  const [isready, setIsReady] = useState(false);
 
   const handleClickKeys = (item: string) => {
     if (noteList.length < 5) {
@@ -32,11 +29,16 @@ function PianoComponent() {
     audio.play();
   };
 
-  const handleCreate = () => {
+  const handleReady = () => {
+    socket.emit("ready");
+    setIsReady(true);
+  }
+
+  const handleStart = () => {
     setCountdown(10);
     setNoteList([]);
     setNoteList_Received([]);
-    socket.emit("start_game", { duration: 10 }); // Start game and initialize scores
+    socket.emit("start_game"); // Start game and initialize scores
   };
 
   const handleSubmit = () => {
@@ -44,12 +46,13 @@ function PianoComponent() {
       // Player 1's turn
       if (noteList.length > 0) {
         socket.emit("send_noteslist", noteList); // Send notes to server
+        socket.emit("end_create");
         setNoteList([]);
       }
     } else {
       // Player 2's turn
       handleSecondPlayerSubmit(); // Process Player 2's submission
-      // setCountdown(0); // Stop countdown for Player 2
+      socket.emit("end_follow");
     }
   };
 
@@ -63,8 +66,10 @@ function PianoComponent() {
     }, 0);
     socket.emit("score_points", pointsEarned); // Send points earned to server
     setNoteList([]); // Reset the note list for the next round
+    setNoteList_Received([]); // Reset the note list for the next round
   };
-
+  
+  //See received note list in console
   useEffect(() => {
     const receiveNotes = (data: { id: number; note: string }[]) => {
       setNoteList_Received(data);
@@ -78,6 +83,7 @@ function PianoComponent() {
     };
   }, []);
 
+  //Countdown update + Current player update
   useEffect(() => {
     socket.on("countdown_update", (data) => {
       setCountdown(data.countdown);
@@ -85,30 +91,30 @@ function PianoComponent() {
 
     socket.on("countdown_finished", () => {
       setCountdown(0);
-      if (currentPlayer) {
-        handleSubmit(); // Ends Player 1’s turn
-      } else {
-        handleSecondPlayerSubmit(); // Calculate and end Player 2’s turn
-      }
+      handleSubmit();
     });
 
     socket.on("current_player_updated", (isPlayer1) => {
       setCurrentPlayer(isPlayer1); // Update the current player state
       if (!isPlayer1) setCountdown(20); // Start 20 seconds for Player 2
     });
+    
+    socket.on("start_create",handleStart);
 
     return () => {
       socket.off("countdown_update");
       socket.off("countdown_finished");
       socket.off("current_player_updated");
+      socket.off("start_create");
     };
   });
+
 
   return (
     <>
       <div className="status">
-        <button className="start" onClick={handleCreate}>
-          Start
+        <button className="start" onClick={handleReady} disabled={isready}>
+          Ready
         </button>
 
         <div className="time">
