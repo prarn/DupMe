@@ -1,45 +1,206 @@
+/* rooms.css */
+
+/* Main container to prevent content overlap with chat */
 .main-container {
+    padding-bottom: 200px; /* Adjust based on the height of the chat box */
     display: flex;
     flex-direction: column;
-    justify-content: space-around; /* Start aligning from the top */
     align-items: center;
-    height: 100vh; 
-}
-
-.header {
-    width: 100%;
+  }
+  
+  /* Header containing the Create Lobby and Main Menu buttons */
+  .header {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     padding: 20px;
-}
-
-.createlobby-button {
-    width: 350px;
-    cursor: pointer;
-}
-
-.no-lobby-banner {
-    position: fixed;
-    top: 40%;
-    background-color: #655454;
-    opacity: 0.82;
-    width: 100vw;
-    height: 175px;
-    color: white;
-    font-size: 40px;
+  }
+  
+  /* Styles for the Create Lobby button */
+  .create-lobby {
     display: flex;
+    width: 400px;
+    height: 100px;
+    padding: 35px 70px;
     justify-content: center;
     align-items: center;
+    gap: 10px;
+    border: 5px solid #373f8d; /* Blue border */
+    background: #fff; /* White background */
+    color: #000; /* Black text */
+    font-size: 30px; /* Adjust based on your design */
+    font-family: 'Pixelify Sans', sans-serif; /* Replace with the specific font family from Figma */
     text-align: center;
-}
-
-.lobby-slot{
-    display: flex;
-    gap: 180px;
-}
-
-.mainmenu-button{
-    width: 300px;
-    margin-bottom: 30px;
     cursor: pointer;
-}
+    box-sizing: border-box;
+  }
+  
+  /* Styles for the Main Menu button */
+  .main-menu {
+    display: flex;
+    padding: 35px 70px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border: 5px solid #373f8d; /* Blue border */
+    background: #fff; /* White background */
+    color: #000; /* Black text */
+    font-size: 30px; /* Adjust based on your design */
+    font-family: 'Pixelify Sans', sans-serif; /* Replace with the specific font family from Figma */
+    text-align: center;
+    cursor: pointer;
+    box-sizing: border-box;
+    width: 300px;
+  }
+  
+  .main-menu-link {
+    color: #000;
+    text-decoration: none;
+  }
+  
+  .main-menu-link:hover {
+    text-decoration: underline;
+  }
+  
+  /* Hover Effects for Buttons */
+  .create-lobby:hover,
+  .main-menu:hover {
+    background-color: #e0e0e0; /* Light gray on hover */
+  }
+  
+  /* No Lobby Banner */
+  .no-lobby-banner {
+    text-align: center;
+    font-size: 24px;
+    margin-top: 50px;
+    color: #000;
+    font-family: 'Pixelify Sans', sans-serif;
+  }
+  
+  /* Lobby Slot */
+  .lobby-slot {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  /* Chat Container */
+  .chat-container {
+    width: 480px;
+    height: 169px;
+    background: rgba(0, 0, 0, 0.75); /* 75% opacity black background */
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    padding: 10px;
+    box-sizing: border-box;
+    color: #fff; /* White text color */
+  }
+  
+  /* Chat Messages Area */
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 10px;
+  }
+  
+  /* Individual Chat Message */
+  .chat-message {
+    margin-bottom: 5px;
+    font-size: 14px; /* Adjust based on your design */
+    font-family: 'Arial', sans-serif;
+  }
+  
+  /* Username in Chat Message */
+  .chat-message strong {
+    font-weight: bold;
+    margin-right: 8px;
+    color: #ffffff; /* Username color */
+  }
+  
+  /* Chat Input Area */
+  .chat-input {
+    display: flex;
+    gap: 10px;
+  }
+  
+  /* Message Input Box */
+  .message-input {
+    width: 361px;
+    height: 44px;
+    background: rgba(0, 0, 0, 0.75); /* 75% opacity black background */
+    border: none;
+    color: #fff;
+    padding: 10px;
+    font-size: 14px; /* Adjust based on your design */
+    font-family: 'Arial', sans-serif;
+    box-sizing: border-box;
+  }
+  
+  /* Send Button */
+  .send-button {
+    display: flex;
+    width: 101px;
+    height: 44px;
+    justify-content: center;
+    align-items: center;
+    border: 5px solid #373f8d; /* Blue border */
+    background: #fff; /* White background */
+    color: #000; /* Black text */
+    font-size: 14px; /* Adjust based on your design */
+    font-family: 'Pixelify Sans', sans-serif;
+    cursor: pointer;
+    box-sizing: border-box;
+  }
+  
+  /* Send Button Hover Effect */
+  .send-button:hover {
+    background-color: #e0e0e0; /* Light gray on hover */
+  }
+  
+  /* Scrollbar Styling for Chat Messages (Optional) */
+  .chat-messages::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .chat-messages::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 3px;
+  }
+  
+  /* Adjusting the Lobby component styles (if necessary) */
+  .lobby-container {
+    width: 300px;
+    padding: 20px;
+    border: 2px solid #373f8d;
+    background-color: #fff;
+    text-align: center;
+    font-family: 'Pixelify Sans', sans-serif;
+  }
+  
+  .lobby-header {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .lobby-players {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+  
+  .lobby-join {
+    padding: 10px 20px;
+    background-color: #373f8d;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .lobby-join:hover {
+    background-color: #7076bc;
+  }
+  

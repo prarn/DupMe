@@ -1,3 +1,5 @@
+// Rooms.tsx
+
 import { useEffect, useState } from "react";
 import socket from "../../socket";
 import { useNavigate } from "react-router-dom";
@@ -8,8 +10,11 @@ import Lobby from "../../components/Lobby/Lobby";
 
 function Rooms() {
   const navigate = useNavigate();
-  const [userCreated, setUserCreated] = useState(false); // Tracks if user is created
+  const [userCreated, setUserCreated] = useState(false);
   const [rooms, setRooms] = useState<{ roomId: string; players: number }[]>([]);
+  const [username, setUsername] = useState("");
+  const [messages, setMessages] = useState<{ user: string; message: string }[]>([]);
+  const [messageInput, setMessageInput] = useState("");
 
   // Handle when create room button is clicked
   const handleCreateRoom = () => {
@@ -36,28 +41,48 @@ function Rooms() {
       socket.off("update_rooms");
       socket.off("alert_roomfull");
     };
-  });
+  }, []);
 
   // Handle when players join the room
   const handleJoin = (roomId: string) => {
     if (userCreated) {
       console.log(`Joining room ${roomId}`);
       socket.emit("join_room", roomId);
-      navigate("/piano");
+      navigate("/game");
     } else {
       alert("Please enter your username first!");
     }
   };
 
+  // Chat functionality
+  useEffect(() => {
+    socket.on("receive_message", (data) => {
+      setMessages((prevMessages) => [...prevMessages, data]);
+    });
+
+    return () => {
+      socket.off("receive_message");
+    };
+  }, []);
+
+  const handleSendMessage = () => {
+    if (messageInput.trim() !== "") {
+      const messageData = {
+        user: username,
+        message: messageInput,
+      };
+      socket.emit("send_message", messageData);
+      setMessageInput("");
+    }
+  };
+
   return (
     <div className="main-container">
+      {/* Header with Create Lobby and Main Menu buttons */}
       <div className="header">
-        <img
-          onClick={handleCreateRoom}
-          className="createlobby-button"
-          src="/rooms_image/createlobby.png"
-          alt="createlobby button"
-        />
+        <div className="create-lobby" onClick={handleCreateRoom}>
+          Create Lobby
+        </div>
       </div>
 
       {/* Conditionally show 'No Lobby' banner only if there are no rooms */}
@@ -66,7 +91,7 @@ function Rooms() {
       {/* Only render UserModal if user is not created */}
       {!userCreated && (
         <div className="user-modal">
-          <UserModal setUserCreated={setUserCreated} />
+          <UserModal setUserCreated={setUserCreated} setUsername={setUsername} />
         </div>
       )}
 
@@ -77,19 +102,38 @@ function Rooms() {
               key={item.roomId}
               roomId={item.roomId}
               players={item.players}
-              handleJoin={handleJoin} // Pass the join functionality to each Lobby
+              handleJoin={handleJoin}
             />
           ))}
       </div>
 
-      <div className="mainmenu-button">
-        <Link to="/">
-          <img
-            className="mainmenu-button"
-            src="/MainMenu.png"
-            alt="mainmenu button"
+      <div className="main-menu">
+          <Link to="/" className="main-menu-link">
+            Main Menu
+          </Link>
+        </div>
+
+      {/* Chat Box */}
+      <div className="chat-container">
+        <div className="chat-messages">
+          {messages.map((msg, index) => (
+            <div key={index} className="chat-message">
+              <strong>{msg.user}:</strong> {msg.message}
+            </div>
+          ))}
+        </div>
+        <div className="chat-input">
+          <input
+            type="text"
+            className="message-input"
+            value={messageInput}
+            onChange={(e) => setMessageInput(e.target.value)}
+            placeholder="Type a message"
           />
-        </Link>
+          <div className="send-button" onClick={handleSendMessage}>
+            Send
+          </div>
+        </div>
       </div>
     </div>
   );

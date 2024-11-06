@@ -46,7 +46,7 @@ body {
 .piano-component {
   position: fixed;
   margin-left: 375px;
-  margin-top: -220px;
+  margin-top: -210px;
 }
 
 .instrument-select {
