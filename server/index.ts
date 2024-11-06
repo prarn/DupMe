@@ -18,15 +18,17 @@ const io = new Server(server, {
 import gameHandler from "./Handler/gameHandler";
 import roomHandler from "./Handler/roomHandler";
 import userHandler from "./Handler/userHandler";
-
+import chatHandler from './Handler/chatHandler';
 io.on( "connection", (socket) => {
     console.log(`User connected: ${socket.id}`)
     gameHandler(io,socket)
     roomHandler(io,socket)
     userHandler(io,socket)
+    chatHandler(io, socket); 
   }
 );
 
 server.listen(3000, '0.0.0.0', function(){
   console.log('listen on PORT:3000')
 });
+
