@@ -147,3 +147,9 @@
 .piano-keys .white-key:nth-child(7)::before {
   display: none; /* No black key above E and B */
 }
+
+.button-ready-clicked {
+  color: var(--white);
+  background-color: green;
+  border-color: green;
+}

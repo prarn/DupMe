@@ -9,7 +9,11 @@ function PianoComponent() {
 
   const [countdown, setCountdown] = useState(10);
   const [currentPlayer, setCurrentPlayer] = useState(true);
-  const [isready, setIsReady] = useState(false);
+  const [isCreator, setIsCreator] = useState(false);
+  const [isFollower, setIsFollower] = useState(false);
+
+  const [isReady, setIsReady] = useState(false);
+  const [waitingMessage, setWaitingMessage] = useState<string>();
 
   const handleClickKeys = (item: string) => {
     if (noteList.length < 5) {
@@ -35,38 +39,35 @@ function PianoComponent() {
   }
 
   const handleStart = () => {
-    setCountdown(10);
     setNoteList([]);
     setNoteList_Received([]);
+    setWaitingMessage("");
     socket.emit("start_game"); // Start game and initialize scores
   };
 
   const handleSubmit = () => {
-    if (currentPlayer) {
-      // Player 1's turn
-      if (noteList.length > 0) {
-        socket.emit("send_noteslist", noteList); // Send notes to server
-        socket.emit("end_create");
-        setNoteList([]);
-      }
-    } else {
-      // Player 2's turn
-      handleSecondPlayerSubmit(); // Process Player 2's submission
-      socket.emit("end_follow");
+    if (isCreator) {
+      // Creator's turn
+      if (noteList.length > 0) socket.emit("send_noteslist", noteList); // Send notes to server
+      socket.emit("end_create");
+      setNoteList([]);
+      setIsCreator(false);
+    } else if (isFollower) {
+      // Follower's turn
+      const pointsEarned = noteList.reduce((points, note, index) => {
+        return note.note === noteList_Received[index]?.note ? points + 1 : points;
+      }, 0);
+      socket.emit("end_follow", pointsEarned); // Send points earned to server
+      setNoteList([]); // Reset the note list for the next round
+      setNoteList_Received([]); // Reset the note list for the next round
+      setIsFollower(false);
+    }else {
+      console.log("error");
     }
   };
 
   const handleReset = () => {
     setNoteList([]);
-  };
-
-  const handleSecondPlayerSubmit = () => {
-    const pointsEarned = noteList.reduce((points, note, index) => {
-      return note.note === noteList_Received[index]?.note ? points + 1 : points;
-    }, 0);
-    socket.emit("score_points", pointsEarned); // Send points earned to server
-    setNoteList([]); // Reset the note list for the next round
-    setNoteList_Received([]); // Reset the note list for the next round
   };
   
   //See received note list in console
@@ -83,7 +84,7 @@ function PianoComponent() {
     };
   }, []);
 
-  //Countdown update + Current player update
+  //Socket form server
   useEffect(() => {
     socket.on("countdown_update", (data) => {
       setCountdown(data.countdown);
@@ -99,13 +100,24 @@ function PianoComponent() {
       if (!isPlayer1) setCountdown(20); // Start 20 seconds for Player 2
     });
     
-    socket.on("start_create",handleStart);
+    socket.on("start_game", handleStart);
+    socket.on("waiting_message", (data) => {
+      setWaitingMessage(data);
+    });
+    socket.on("start_create", () => {
+      setIsCreator(true);
+    })
+    socket.on("start_follow", () => {
+      setIsFollower(true);
+    })
 
     return () => {
       socket.off("countdown_update");
       socket.off("countdown_finished");
       socket.off("current_player_updated");
+      socket.off("start_game");
       socket.off("start_create");
+      socket.off("start_follow");
     };
   });
 
@@ -113,9 +125,13 @@ function PianoComponent() {
   return (
     <>
       <div className="status">
-        <button className="start" onClick={handleReady} disabled={isready}>
+        <button 
+          className={isReady ? "button-ready-clicked":"start"}
+          onClick={handleReady} 
+          disabled={isReady}>
           Ready
         </button>
+        <div>{waitingMessage}</div>
 
         <div className="time">
           <div className="timer-background">
@@ -148,7 +164,7 @@ function PianoComponent() {
             ))}
         </div>
 
-        <button className="submit" onClick={handleSubmit}>
+        <button className="submit" onClick={() => {socket.emit("stop_countdown");}}>
           Submit
         </button>
       </div>

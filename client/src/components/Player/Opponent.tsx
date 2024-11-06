@@ -19,7 +19,7 @@ function Opponent() {
     socket.on("update_opponentInstrument", (data) => {
       setMyInstrument(data.instrument);
     });
-  }, [socket]);
+  },);
 
   return (
     <>
