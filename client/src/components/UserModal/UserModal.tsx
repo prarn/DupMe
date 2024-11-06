@@ -6,14 +6,18 @@ function UserModal({
   setUserCreated,
 }: {
   setUserCreated: (value: boolean) => void;
+  setUsername: (value: string) => void;
 }) {
   const [username, setUsername] = useState("");
   const [avatar, setAvatar] = useState("");
 
   const handleSubmit = () => {
-    if (username) {
-      socket.emit("create_user", { username, avatar }); // Emit event to create the user
-      setUserCreated(true); // Close the modal when user is created
+    if (username.trim() !== "") {
+      socket.emit("create_user", { username: username.trim(), avatar });
+      setUserCreated(true);
+      setUsername(username.trim());
+    } else {
+      alert("Please enter a valid username!");
     }
   };
 
