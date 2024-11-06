@@ -10,13 +10,29 @@
     height: auto;/
   }
 .findgame-button{
-    width: 250px;
+    width: 350px;
     height: auto;
 }
 .soundtesting-button{
     width: 350px
 }
 
-.changebg-button{
-    width: 450px;
+.tutorial-button{
+    width: 350px
 }
+
+.changebg-button {
+  position: absolute;
+  top: 20px; /* Adjust as needed */
+  right: 20px; /* Adjust as needed */
+  cursor: pointer;
+  
+}
+
+.supportus-button {
+    position: absolute;
+    bottom: 20px; /* Adjust as needed */
+    right: 20px; /* Adjust as needed */
+    cursor: pointer;
+    width: 250px
+  }

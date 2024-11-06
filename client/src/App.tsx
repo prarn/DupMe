@@ -2,14 +2,17 @@ import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Route, Routes } from "react-router-dom";
 
-import Page404 from "./Pages/Page404/Page404";
-import Home from "./Pages/Home/Home";
+import Page404 from './Pages/Page404/Page404';
+import Home from './Pages/Home/Home';
+import SoundTesting from './Pages/SoundTesting/SoundTesting';
+import InLobby from './Pages/InLobby/InLobby';
+import Select from './Pages/Select/Select';
+import HowToPlay from './Pages/HowToPlay/HowToPlay'; // Import your HowToPlay component
+import Rooms from './Pages/Rooms/Rooms';
+import SupportUs from './Pages/SupportUs/SupportUs';
 import Game from "./Pages/Game/Game";
-import SoundTesting from "./Pages/SoundTesting/SoundTesting";
-import InLobby from "./Pages/InLobby/InLobby";
-import Select from "./Pages/Select/Select";
-import Rooms from "./Pages/Rooms/Rooms";
 import BackgroundChange from "./Pages/BackgroundChange/BackgroundChange";
+
 
 function App() {
   const location = useLocation();
@@ -80,6 +83,8 @@ function App() {
         <Route path="/select" element={<Select />} />
         <Route path="*" element={<Page404 />} />
         <Route path="/backgroundchange" element={<BackgroundChange />} />
+        <Route path="/how-to-play" element={<HowToPlay />} />
+        <Route path="/support-us" element={<SupportUs />} />
       </Routes>
     </>
   );

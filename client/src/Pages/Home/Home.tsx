@@ -13,7 +13,13 @@ function Home() {
           />
         </Link>
       </div>
-
+      <Link to="how-to-play">
+        <img
+          className="tutorial-button"
+          src="/homepage_image/tutorial.png"
+          alt="tutorial button"
+        />
+      </Link>
       <Link to="/rooms">
         <img
           className="findgame-button"
@@ -29,14 +35,24 @@ function Home() {
           alt="soundtesting button"
         />
       </Link >
-      <Link to="/backgroundchange">
-      <img
-        className="changebg-button"
-        src="/homepage_image/changebg.png"
-        alt="changebg button"
-      />
+      
+      <Link to="/support-us">
+        <img
+          className="supportus-button"
+          src="/homepage_image/supportus.png"
+          alt="supportus button"
+        />
       </Link>
+      <Link to="backgroundchange">
+        <img
+          className="changebg-button"
+          src="/homepage_image/changebg.png"
+          alt="changebg button"
+        />
+      </Link>
+      
     </div>
   );
 }
+
 export default Home;

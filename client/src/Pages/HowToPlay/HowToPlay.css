@@ -1,0 +1,15 @@
+.howtoplay-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  /* Reduce the size of the main images */
+  .howtoplay-logo, .howtoplaydetail-logo {
+    width: 100%; /* Adjust as needed */
+    max-width: 1500px;
+    margin-bottom: 20px;
+  }
+  
