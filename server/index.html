@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DupMe Server</title>
+</head>
+<body>
+    <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+
+
+    <h1>Hello</h1>
+    <div>
+        <h2 id="user-count">0 users online</h2>
+        <button onclick="refreshUsers()">Refresh User</button>
+        <p id="user-info">hola</p>
+    </div>
+    
+    <div>
+        <h3>Room 1</h3>
+        <button onclick="serverRestart('Room1')">Room 1 Restart</button>
+    </div>
+    <div>
+        <h3>Room 2</h3>
+        <button onclick="serverRestart('Room2')">Room 2 Restart</button>
+    </div>
+    <div>
+        <h3>Room 3</h3>
+        <button onclick="serverRestart('Room3')">Room 3 Restart</button>
+    </div>
+</body>
+</html>
+
+
