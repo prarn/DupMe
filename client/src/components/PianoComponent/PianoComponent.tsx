@@ -6,6 +6,7 @@ function PianoComponent() {
   const notes = ["C", "D", "E", "F", "G", "A", "B"];
   const [noteList, setNoteList] = useState<{ id: number; note: string }[]>([]);
   const [noteList_Received, setNoteList_Received] = useState<{ id: number; note: string }[]>([]);
+  const [instrument, setInstrument] = useState<string>("piano");
 
   const [countdown, setCountdown] = useState(10);
   const [isCreator, setIsCreator] = useState(false);
@@ -22,7 +23,7 @@ function PianoComponent() {
         console.log(newNote);
         return newNoteList;
       });
-      playSound(`/notes/piano/${item.toLowerCase()}.mp3`);
+      playSound(`/notes/${instrument.toLowerCase()}/${item.toLowerCase()}.mp3`);
     }
   };
 
@@ -30,6 +31,11 @@ function PianoComponent() {
     const audio = new Audio(soundFile);
     audio.volume = 0.2;
     audio.play();
+  };
+
+  const handleInstrumentClick = (instrument: string) => {
+    setInstrument(instrument);
+    socket.emit("update_instrument", instrument);
   };
 
   const handleReplay = async () => {
@@ -205,6 +211,17 @@ function PianoComponent() {
         <button className="reset" onClick={handleReset}>
           Reset
         </button>
+      </div>
+
+      <div className="instrument-container">
+        <div className="instrument-title">Instrument: </div>
+        <div className="instrument-button">
+          <button onClick={() => handleInstrumentClick("piano")}>Piano</button>
+
+          <button onClick={() => handleInstrumentClick("trumpet")}>Trumpet</button>
+
+          <button onClick={() => handleInstrumentClick("guitar")}>Guitar</button>
+        </div>
       </div>
     </>
   );
