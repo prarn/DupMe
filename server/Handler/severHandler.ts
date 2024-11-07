@@ -36,11 +36,13 @@ export default function serverHandler(io: Server, socket: Socket) {
             });
         
             rooms[roomIndex].round = 0;
+            rooms[roomIndex].interval = undefined;
+            rooms[roomIndex].countdown = 0;
         
             // send info to client
             // serverUpdatePlayerInRoom(roomId)
             // io.to(roomId).emit('restart', { round: 0 });
-            io.to(roomId).emit('restart', { round: 0 });
+            io.to(roomId).emit('restart');
     });
 
     // Handle user disconnect

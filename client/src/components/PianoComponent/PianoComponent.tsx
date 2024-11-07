@@ -119,6 +119,7 @@ function PianoComponent() {
     })
     socket.on("restart", () => {
       setIsReady(false);
+      setCountdown(10);
     })
 
     return () => {

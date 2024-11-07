@@ -61,27 +61,28 @@ function roomHandler(io: Server, socket: Socket) {
   };
 
   // Leave Room
-  const leaveRoom = (roomId: string) => {
-    const room = rooms.find((r) => r.roomId === roomId);
+  const leaveRoom = () => {
     const user = users.find((u) => u.sid === socket.id);
-
-    if (room && user) {
-      user.roomId = ""; // Clear the room assignment from the user
-      room.players -= 1; // Decrease the player count in the room
-      socket.leave(roomId); // Leave the socket room
-
-      console.log(`${socket.id} left room: ${roomId}`);
-
-      // If no players left, delete the room
-      if (room.players === 0) {
-        rooms.splice(rooms.indexOf(room), 1);
-        console.log(`Room deleted: ${roomId}`);
+    if (user) {
+      const room = rooms.find((r) => r.roomId === user.roomId);
+      if (room) {
+        user.roomId = ""; // Clear the room assignment from the user
+        room.players -= 1; // Decrease the player count in the room
+        socket.leave(user.roomId); // Leave the socket room
+  
+        console.log(`${socket.id} left room: ${user.roomId}`);
+  
+        // If no players left, delete the room
+        if (room.players === 0) {
+          rooms.splice(rooms.indexOf(room), 1);
+          console.log(`Room deleted: ${user.roomId}`);
+        }
+  
+        // Emit the updated room list to all clients
+        io.emit("update_rooms", rooms);
+      } else {
+        console.log(`Room or user not found for leaving: ${user.roomId}`);
       }
-
-      // Emit the updated room list to all clients
-      io.emit("update_rooms", rooms);
-    } else {
-      console.log(`Room or user not found for leaving: ${roomId}`);
     }
   };
 

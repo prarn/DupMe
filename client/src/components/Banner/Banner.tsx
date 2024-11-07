@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import socket from "../../socket";
+import { useNavigate } from "react-router-dom";
 // import "./Banner.css";
 
 function Banner() {
@@ -7,10 +8,15 @@ function Banner() {
     const [time, setTime] = useState<string>();
     const [cooldown, setCooldown] = useState(false);
     const [winner, setWinner] = useState(false);
+    const navigate = useNavigate();
 
     const handleRestart = () => {
         socket.emit('restart_game');
         setWinner(false);
+    }
+    const handleLeaveRoom =() => {
+        socket.emit('leave_room');
+        navigate("/rooms");
     }
 
     useEffect(() => {
@@ -36,6 +42,7 @@ function Banner() {
 
     return (
         <div className="">
+            <button onClick={handleLeaveRoom}>Back to lobby</button>
             { cooldown && (
                 <>
                     <div>{message}</div>
@@ -47,6 +54,7 @@ function Banner() {
                 <>
                     <div>{message}</div>
                     <button onClick={handleRestart}>Restart</button>
+                    <button onClick={handleLeaveRoom}>Back to lobby</button>
                 </>
             )}
         </div>
