@@ -151,7 +151,7 @@
 .button-ready-clicked {
   color: var(--white);
   background-color: green;
-  border-color: green;
+  border-color: green; 
   width: 150px;
   height: 30px;
   font-size: 21px;
@@ -160,4 +160,24 @@
 .waiting-message {
   color: white;
   font-size: 20px;
+}
+
+.instrument-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.instrument-title {
+  font-size: 30px;
+  margin-right: 10px;
+}
+
+.instrument-button button {
+  background-color: brown;
+  width: 150px;
+  height: 60px;
+  cursor: pointer;
+  font-size: 30px;
+  margin: 5px;
 }

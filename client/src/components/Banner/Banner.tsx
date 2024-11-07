@@ -19,26 +19,33 @@ function Banner() {
     navigate("/rooms");
   };
 
-  useEffect(() => {
-    socket.on("turn", (data: string) => {
-      setMessage(data);
-    });
-    socket.on("time", (data: string) => {
-      setTime(data);
-    });
-    socket.on("update_cooldown", (data: boolean) => {
-      setCooldown(data);
-    });
-    socket.on("update_winner", (data: boolean) => {
-      setWinner(data);
-    });
-    return () => {
-      socket.off("turn");
-      socket.off("time");
-      socket.off("update_cooldown");
-      socket.off("update_winner");
-    };
-  });
+    useEffect(() => {
+        socket.on("turn",(data: string) => {
+            setMessage(data);
+        });
+        socket.on("time",(data: string) => {
+            setTime(data);
+        });
+        socket.on("update_cooldown",(data: boolean) => {
+            setCooldown(data);
+        })
+        socket.on("update_winner",(data: boolean) => {
+            setWinner(data);
+        })
+        socket.on("restart_server", () => {
+            setCooldown(false);
+            setWinner(false);
+            setMessage("");
+            setTime("");
+          })
+        return () => {
+            socket.off("turn");
+            socket.off("time");
+            socket.off("update_cooldown");
+            socket.off("update_winner");
+            socket.off("restart_server");
+        }
+    })
 
   return (
     <div className="">

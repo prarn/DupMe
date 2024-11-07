@@ -13,13 +13,9 @@ function InstrumentSelect() {
         <div className="instrument-button">
           <button onClick={() => handleInstrumentClick("piano")}>Piano</button>
 
-          <button onClick={() => handleInstrumentClick("trumpet")}>
-            Trumpet
-          </button>
+          <button onClick={() => handleInstrumentClick("trumpet")}>Trumpet</button>
 
-          <button onClick={() => handleInstrumentClick("guitar")}>
-            Guitar
-          </button>
+          <button onClick={() => handleInstrumentClick("guitar")}>Guitar</button>
         </div>
       </div>
     </>

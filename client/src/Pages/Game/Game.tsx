@@ -1,5 +1,4 @@
 import "./Game.css";
-import InstrumentSelect from "../../components/InstrumentSelect/InstrumenrSelect";
 import Opponent from "../../components/Player/Opponent";
 import Me from "../../components/Player/Me";
 import PianoComponent from "../../components/PianoComponent/PianoComponent";
@@ -26,9 +25,6 @@ function Game() {
           <PianoComponent />
         </div>
 
-        <div className="instrument-select">
-          <InstrumentSelect />
-        </div>
       </div>
     </>
   );
