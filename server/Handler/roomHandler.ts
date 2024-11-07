@@ -14,6 +14,8 @@ function roomHandler(io: Server, socket: Socket) {
         roomId: `Room${roomCounter++}`,
         round: 1,
         players: 0,
+        interval: undefined,
+        countdown: 0
       });
     } else {
       socket.emit("alert_roomfull");

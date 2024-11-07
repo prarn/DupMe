@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import socket from "../../socket";
-import "./Banner.css";
+// import "./Banner.css";
 
-function Cooldown() {
+function Banner() {
     const [message, setMessage] = useState<string>();
     const [time, setTime] = useState<string>();
     const [cooldown, setCooldown] = useState(false);
@@ -35,7 +35,7 @@ function Cooldown() {
     })
 
     return (
-        <div className="cooldown-banner">
+        <div className="">
             { cooldown && (
                 <>
                     <div>{message}</div>
@@ -53,4 +53,4 @@ function Cooldown() {
     )
 }
 
-export default Cooldown;
+export default Banner;

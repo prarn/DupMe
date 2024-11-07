@@ -93,7 +93,7 @@ function gameHandler(io:Server, socket: Socket) {
     
             if (playersInRoom[0] && playersInRoom[1]) {
                 // for selecting mode
-                socket.to(roomId).emit('opponent_ready', true);
+                // socket.to(roomId).emit('opponent_ready', true);
                 console.log('Opponent ready message sent.');
     
                 const bothPlayersReady = playersInRoom.every((player) => player.ready);
@@ -103,7 +103,7 @@ function gameHandler(io:Server, socket: Socket) {
                     let firstPlayer = playersInRoom.find((player) => player.P1);
                     let p1sid = "";
                     let p1name = "";
-                    let defaultp1 = "";
+                    // let defaultp1 = "";
                     
                     if (!firstPlayer) {
                         p1sid = Math.random() < 0.5 ? playersInRoom[0].sid : playersInRoom[1].sid;
@@ -113,13 +113,13 @@ function gameHandler(io:Server, socket: Socket) {
                             if (user.sid === p1sid) {
                                 user.P1 = true;
                                 p1name = user.username;
-                                defaultp1 = `${p1name} is the first player at random`;
+                                // defaultp1 = `${p1name} is the first player at random`;
                             }
                         });
                     } else {
                         p1sid = firstPlayer.sid;
                         p1name = firstPlayer.username;
-                        defaultp1 = `The winner ${p1name} is the first player`;
+                        // defaultp1 = `The winner ${p1name} is the first player`;
                     }
     
                     rooms[roomIndex].round = 1;
@@ -220,12 +220,12 @@ function gameHandler(io:Server, socket: Socket) {
                     const result = winner(roomId);
                     if (result.tie) {
                         io.to(roomId).emit('update_winner', true);
-                        io.to(roomId).emit('turn', { message: "Tie !!"});
+                        io.to(roomId).emit('turn', "Tie !!");
                     } else {
                         io.to(roomId).emit('update_winner', true);
-                        io.to(roomId).emit('turn', { message: `The winner is ${result.winner}`});
+                        io.to(roomId).emit('turn', `The winner is ${result.winner}`);
                     }
-                    io.to(roomId).emit('end_game', result);
+                    // io.to(roomId).emit('end_game', result);
                 } else { // Round 1 = continues
                     rooms[roomIndex].round++;
                     const round = rooms[roomIndex].round;
@@ -245,21 +245,41 @@ function gameHandler(io:Server, socket: Socket) {
         return;
     }
 
+    const clientRestart = () => {
+        // Info
+        const userInfo = playerInfo(io, socket);
+        const sid = socket.id
+        const userIndex = userInfo.userIndex;
+        const roomId = userInfo.roomId;
+        const roomIndex = userInfo.roomIndex;
+
+        if ((userIndex !== -1) && roomId && (roomIndex !== -1)) {
+            const playersInRoom = users.filter((user) => user.roomId === roomId);
+
+            playersInRoom.forEach((playerInRoom) => {
+                playerInRoom.score = 0;
+                playerInRoom.ready = false;
+            });
+
+            rooms[roomIndex].round = 0;
+
+            updatePlayerInRoom(io, socket, roomId);
+
+            io.to(roomId).emit('restart', { round: 0 });
+            // io.to(roomId).emit('opponent_ready', false);
+
+            console.log(`client restart ${roomId}`)
+        }
+        return;
+    }
+
     socket.on("send_noteslist", sendNoteList);
     socket.on("ready", ready);
     socket.on("start_game", startGame);
     socket.on("end_create",endCreate);
     socket.on("end_follow",endFollow);
-    // socket.on('stop_countdown', () => {
-    //     const user = users.find(user => user.sid === socket.id);
-    //     if (!user || !user.roomId) {
-    //         console.error("Room ID not found for user.");
-    //         return;
-    //     }
-    //     const roomId = user.roomId;
-    //     socket.to(roomId).emit('countdown_finished');
-    // });
     socket.on('stop_countdown', stopCountdown);
+    socket.on('restart_game',clientRestart);
 
     return () =>{
         socket.off("send_noteslist", sendNoteList);
@@ -267,6 +287,8 @@ function gameHandler(io:Server, socket: Socket) {
         socket.off("start_game", startGame);
         socket.off("end_create",endCreate);
         socket.off("end_follow",endFollow);
+        socket.off('stop_countdown', stopCountdown);
+        socket.off('restart_game',clientRestart);
     }
 }
 export default gameHandler;

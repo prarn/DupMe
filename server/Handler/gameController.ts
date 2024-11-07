@@ -6,7 +6,7 @@ export function readySetGo (io: Server, socket: Socket, roomId: string, isCreati
     const interval = setInterval(() => {
         if (currentTime === 0) {
             io.to(roomId).emit('time', "");
-            io.to(roomId).emit('update_banner',false);
+            io.to(roomId).emit('update_cooldown',false);
             onTimeout();
             clearInterval(interval);
         } else if (currentTime === 1) {
@@ -16,7 +16,7 @@ export function readySetGo (io: Server, socket: Socket, roomId: string, isCreati
         }else if (currentTime === 3) {
             io.to(roomId).emit('time', "Ready");
         }else if (currentTime > 3) {
-            io.to(roomId).emit('update_banner',true);
+            io.to(roomId).emit('update_cooldown',true);
             if (isCreating) {
                 socket.emit('turn', "Your turn to create a pattern");
                 socket.to(roomId).emit('turn', 'Waiting for another player to create a pattern');

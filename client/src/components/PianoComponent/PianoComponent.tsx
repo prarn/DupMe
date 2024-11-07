@@ -117,6 +117,9 @@ function PianoComponent() {
       handleReplay();
       console.log('Following');
     })
+    socket.on("restart", () => {
+      setIsReady(false);
+    })
 
     return () => {
       socket.off("countdown_update");
@@ -125,6 +128,7 @@ function PianoComponent() {
       socket.off("start_game");
       socket.off("start_create");
       socket.off("start_follow");
+      socket.off("restart");
     };
   });
 
