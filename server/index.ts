@@ -7,9 +7,12 @@ import gameHandler from "./Handler/gameHandler";
 import roomHandler from "./Handler/roomHandler";
 import userHandler from "./Handler/userHandler";
 import chatHandler from "./Handler/chatHandler";
+import serverHandler from "./Handler/serverHandler";
 import { users, rooms } from "./dataStorage";  // Assuming user and room data are stored here
 
 const app = express();
+
+// Enable Cross-Origin Resource Sharing
 app.use(cors());
 
 // Serve HTML and static files
@@ -32,11 +35,12 @@ const io = new Server(server, {
 io.on("connection", (socket: Socket) => {
   console.log(`User connected: ${socket.id}`);
 
-  // Initialize game, room, user, and chat handlers
+  // Initialize game, room, user, chat, and server handlers
   gameHandler(io, socket);
   roomHandler(io, socket);
   userHandler(io, socket);
   chatHandler(io, socket);
+  serverHandler(io, socket);
 
   // Emit current user count to newly connected client
   socket.emit('users', users);
@@ -48,25 +52,35 @@ io.on("connection", (socket: Socket) => {
 
   // Handle room restart request
   socket.on('server_restart', ({ roomId }) => {
-    console.log(`Restarting ${roomId}`);
+    console.log(`Restarting room: ${roomId}`);
     const room = rooms.find((r) => r.roomId === roomId);
 
     if (room) {
-      room.round = 1;  // Reset room state
+      // Reset room state
+      room.round = 1;
       io.to(roomId).emit('room_restarted', roomId);  // Notify users in room
-      console.log(`${roomId} has been restarted.`);
+      console.log(`Room ${roomId} has been restarted.`);
     } else {
       console.log(`Room ${roomId} not found.`);
     }
   });
 
-  // Handle user disconnect
+  // Handle user disconnection
   socket.on("disconnect", () => {
     console.log(`User disconnected: ${socket.id}`);
+
+    // Remove user from the users list
     const userIndex = users.findIndex((user) => user.sid === socket.id);
     if (userIndex !== -1) {
+      const user = users[userIndex];
       users.splice(userIndex, 1);  // Remove user from list
-      io.emit('users', users);  // Broadcast updated user list to all clients
+
+      // If user was in a room, update room player count
+      const room = rooms.find((r) => r.roomId === user.roomId);
+      if (room) {
+        room.players -= 1;  // Decrease player count in the room
+        io.to(user.roomId).emit('users', users);  // Broadcast updated user list to all clients
+      }
     }
   });
 });
@@ -75,3 +89,4 @@ io.on("connection", (socket: Socket) => {
 server.listen(3000, '0.0.0.0', () => {
   console.log('Server is listening on PORT:3000');
 });
+
