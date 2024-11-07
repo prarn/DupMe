@@ -1,0 +1,48 @@
+.btl-button,
+.re-button {
+  width: 200px;
+  height: 40px;
+  font-size: 24px;
+}
+
+.ready-set-go {
+  position: fixed;
+  top: 10%;
+  left: 10%;
+  width: 80%;
+  height: 80%;
+  background-color: rgba(0, 0, 0, 0.9);
+  border: 20px solid #826c34;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.rsg-message,
+.rsg-time {
+  font-size: 60px;
+  color: white;
+}
+
+.winner {
+  position: fixed;
+  top: 10%;
+  left: 10%;
+  width: 80%;
+  height: 80%;
+  background-color: rgba(0, 0, 0, 0.9);
+  border: 20px solid #826c34;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  gap: 20px;
+}
+
+.winner-message {
+  font-size: 60px;
+  color: white;
+}

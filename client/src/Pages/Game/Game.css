@@ -44,11 +44,10 @@ body {
 }
 
 .piano-component {
-  position: fixed;
-  margin-left: 375px;
-  margin-top: -210px;
+  margin-left: 10%px;
+  margin-top: -220px;
 }
 
 .instrument-select {
-  margin-top: 500px;
+  margin-top: 10px;
 }
