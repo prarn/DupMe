@@ -3,6 +3,8 @@
   width: 200px;
   height: 40px;
   font-size: 24px;
+  background-color: #ffe0b5;
+  border-color: #826c34;
 }
 
 .ready-set-go {
@@ -11,7 +13,7 @@
   left: 10%;
   width: 80%;
   height: 80%;
-  background-color: rgba(0, 0, 0, 0.9);
+  background-color: rgba(0, 0, 0, 1.0);
   border: 20px solid #826c34;
   display: flex;
   flex-direction: column;
@@ -32,7 +34,7 @@
   left: 10%;
   width: 80%;
   height: 80%;
-  background-color: rgba(0, 0, 0, 0.9);
+  background-color: rgba(0, 0, 0, 1.0);
   border: 20px solid #826c34;
   display: flex;
   flex-direction: column;
