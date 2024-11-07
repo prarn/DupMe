@@ -223,7 +223,7 @@ function gameHandler(io:Server, socket: Socket) {
                         io.to(roomId).emit('turn', "Tie !!");
                     } else {
                         io.to(roomId).emit('update_winner', true);
-                        io.to(roomId).emit('turn', `The winner is ${result.winner}`);
+                        io.to(roomId).emit('turn', `The winner is "${result.winner}" !!!`);
                     }
                     // io.to(roomId).emit('end_game', result);
                 } else { // Round 1 = continues
