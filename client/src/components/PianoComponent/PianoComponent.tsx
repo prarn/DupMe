@@ -125,7 +125,16 @@ function PianoComponent() {
     })
     socket.on("restart", () => {
       setIsReady(false);
+      setNoteList([]);
+      setNoteList_Received([]);
       setCountdown(10);
+    })
+    socket.on("restart_server", () => {
+      socket.emit("restart_game");
+      setIsCreator(false);
+      setIsFollower(false);
+      setWaitingMessage('');
+      console.log("Server restart!!!")
     })
 
     return () => {
@@ -217,9 +226,7 @@ function PianoComponent() {
         <div className="instrument-title">Instrument: </div>
         <div className="instrument-button">
           <button onClick={() => handleInstrumentClick("piano")}>Piano</button>
-
           <button onClick={() => handleInstrumentClick("trumpet")}>Trumpet</button>
-
           <button onClick={() => handleInstrumentClick("guitar")}>Guitar</button>
         </div>
       </div>

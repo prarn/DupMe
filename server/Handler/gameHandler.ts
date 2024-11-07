@@ -259,13 +259,16 @@ function gameHandler(io:Server, socket: Socket) {
             playersInRoom.forEach((playerInRoom) => {
                 playerInRoom.score = 0;
                 playerInRoom.ready = false;
+                playerInRoom.P1 = false;
             });
 
             rooms[roomIndex].round = 0;
+            clearInterval(rooms[roomIndex].interval);
+            rooms[roomIndex].countdown = 0;
 
             updatePlayerInRoom(io, socket, roomId);
 
-            io.to(roomId).emit('restart', { round: 0 });
+            io.to(roomId).emit('restart');
             // io.to(roomId).emit('opponent_ready', false);
 
             console.log(`client restart ${roomId}`)

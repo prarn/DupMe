@@ -25,24 +25,24 @@ export default function serverHandler(io: Server, socket: Socket) {
     // Handle room restart request
     socket.on("server_restart", ({ roomId }) => {
         console.log(`serverRestart ${roomId}`);
-            const roomIndex = rooms.findIndex((room) => room.roomId === roomId);
-            const playersInRoom = users.filter((user) => user.roomId === roomId);
+        const roomIndex = rooms.findIndex((room) => room.roomId === roomId);
+        const playersInRoom = users.filter((user) => user.roomId === roomId);
+    
+        // set new properties
+        playersInRoom.forEach((playerInRoom) => {
+            playerInRoom.score = 0;
+            playerInRoom.ready = false;
+            playerInRoom.P1 = false;
+        });
         
-            // set new properties
-            playersInRoom.forEach((playerInRoom) => {
-                playerInRoom.score = 0;
-                playerInRoom.ready = false;
-                playerInRoom.P1 = false;
-            });
+        rooms[roomIndex].round = 0;
+        clearInterval(rooms[roomIndex].interval);
+        rooms[roomIndex].countdown = 0;
         
-            rooms[roomIndex].round = 0;
-            rooms[roomIndex].interval = undefined;
-            rooms[roomIndex].countdown = 0;
-        
-            // send info to client
-            // serverUpdatePlayerInRoom(roomId)
-            // io.to(roomId).emit('restart', { round: 0 });
-            io.to(roomId).emit('restart');
+        // send info to client
+        // serverUpdatePlayerInRoom(roomId);
+        io.to(roomId).emit('restart_server');
+        io.to(roomId).emit('restart');
     });
 
     // Handle user disconnect

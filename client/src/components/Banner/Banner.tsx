@@ -32,11 +32,18 @@ function Banner() {
         socket.on("update_winner",(data: boolean) => {
             setWinner(data);
         })
+        socket.on("restart_server", () => {
+            setCooldown(false);
+            setWinner(false);
+            setMessage("");
+            setTime("");
+          })
         return () => {
             socket.off("turn");
             socket.off("time");
             socket.off("update_cooldown");
             socket.off("update_winner");
+            socket.off("restart_server");
         }
     })
 
