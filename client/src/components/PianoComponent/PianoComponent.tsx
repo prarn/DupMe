@@ -41,7 +41,7 @@ function PianoComponent() {
   const handleReplay = async () => {
     for (let i = 0; i < noteList_Received.length; i++) {
       const note = noteList_Received[i].note;
-      playSound(`/notes/piano/${note.toLowerCase()}.mp3`);
+      playSound(`/notes/${instrument.toLowerCase()}/${note.toLowerCase()}.mp3`);
       await new Promise((resolve) => setTimeout(resolve, 500)); // 500ms delay between notes
     }
   };  
