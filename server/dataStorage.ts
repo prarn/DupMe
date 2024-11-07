@@ -10,6 +10,8 @@ export let users: {
 }[] = [];
 
 export let rooms: {
+  interval: any;
+  countdown: number;
   roomId: string;
   round: number;
   players: number;

@@ -3,14 +3,14 @@ import InstrumentSelect from "../../components/InstrumentSelect/InstrumenrSelect
 import Opponent from "../../components/Player/Opponent";
 import Me from "../../components/Player/Me";
 import PianoComponent from "../../components/PianoComponent/PianoComponent";
-import Cooldown from "../../components/Cooldown/Cooldown";
+import Banner from "../../components/Banner/Banner";
 
 function Game() {
   return (
     <>
       <div className="game-container">
         <div className="">
-            <Cooldown />
+            <Banner />
         </div>
 
         <div className="header">

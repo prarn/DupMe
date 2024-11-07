@@ -23,24 +23,54 @@ function gameHandler(io:Server, socket: Socket) {
             return;
         }
         const roomId = user.roomId;
-        let countdown = duration;
-
-        const interval = setInterval(() => {
-            countdown--;
-            io.to(roomId).emit("countdown_update", { countdown });
-
-            if (countdown <= 0) {
-                clearInterval(interval);
-                io.to(roomId).emit("countdown_finished", { countdown: 0 });
+        const room = rooms.find(room => room.roomId === roomId);
+        if (!room) {
+            console.error("Room not found.");
+            return;
+        }
+    
+        // Initialize countdown
+        room.countdown = duration;
+    
+        // Clear any existing interval for this room
+        if (room.interval) {
+            clearInterval(room.interval);
+        }
+    
+        // Start the countdown interval and save it in the room's interval property
+        room.interval = setInterval(() => {
+            if (room.countdown !== undefined) {
+                room.countdown--;
+                io.to(roomId).emit("countdown_update", { countdown: room.countdown });
+    
+                if (room.countdown <= 0) {
+                    clearInterval(room.interval);
+                    room.interval = null;
+                    io.to(roomId).emit("countdown_finished", { countdown: 0 });
+                }
             }
         }, 1000);
-
-        // Stopping the countdown if "send_noteslist" is triggered
-        socket.on('stop_countdown', () => {
-            clearInterval(interval);
-            io.to(roomId).emit('countdown_finished', { countdown: 0 });
-        });
     };
+
+    const stopCountdown = () => {
+        const user = users.find(user => user.sid === socket.id);
+        if (!user || !user.roomId) {
+            console.error("Room ID not found for user.");
+            return;
+        }
+        const roomId = user.roomId;
+        const room = rooms.find(room => room.roomId === user.roomId);
+        if (!room) {
+            console.error("Room not found.");
+            return;
+        }
+        if (room && room.interval) {
+            clearInterval(room.interval);
+            room.interval = null;
+            room.countdown = 0; // Reset countdown
+            io.to(roomId).emit("countdown_finished", { countdown: 0 });
+        }
+    }
 
     const ready = () => {
         console.log('Ready function triggered');
@@ -175,7 +205,7 @@ function gameHandler(io:Server, socket: Socket) {
             users[userIndex].score = users[userIndex].score + addScore;
             console.log(`${users[userIndex].username} add ${addScore} = ${users[userIndex].score}`);
 
-            io.to(roomId).emit('turn', { message: `${name} get ${addScore} score` });
+            // io.to(roomId).emit('turn', { message: `${name} get ${addScore} score` });
             updatePlayerInRoom(io, socket, roomId);
 
             // time
@@ -189,8 +219,10 @@ function gameHandler(io:Server, socket: Socket) {
                     rooms[roomIndex].round = 0;
                     const result = winner(roomId);
                     if (result.tie) {
+                        io.to(roomId).emit('update_winner', true);
                         io.to(roomId).emit('turn', { message: "Tie !!"});
                     } else {
+                        io.to(roomId).emit('update_winner', true);
                         io.to(roomId).emit('turn', { message: `The winner is ${result.winner}`});
                     }
                     io.to(roomId).emit('end_game', result);
@@ -218,6 +250,16 @@ function gameHandler(io:Server, socket: Socket) {
     socket.on("start_game", startGame);
     socket.on("end_create",endCreate);
     socket.on("end_follow",endFollow);
+    // socket.on('stop_countdown', () => {
+    //     const user = users.find(user => user.sid === socket.id);
+    //     if (!user || !user.roomId) {
+    //         console.error("Room ID not found for user.");
+    //         return;
+    //     }
+    //     const roomId = user.roomId;
+    //     socket.to(roomId).emit('countdown_finished');
+    // });
+    socket.on('stop_countdown', stopCountdown);
 
     return () =>{
         socket.off("send_noteslist", sendNoteList);

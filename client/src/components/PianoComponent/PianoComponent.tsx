@@ -8,7 +8,6 @@ function PianoComponent() {
   const [noteList_Received, setNoteList_Received] = useState<{ id: number; note: string }[]>([]);
 
   const [countdown, setCountdown] = useState(10);
-  const [currentPlayer, setCurrentPlayer] = useState(true);
   const [isCreator, setIsCreator] = useState(false);
   const [isFollower, setIsFollower] = useState(false);
 
@@ -102,12 +101,7 @@ function PianoComponent() {
 
     socket.on("countdown_finished", () => {
       setCountdown(0);
-      handleSubmit();
-    });
-
-    socket.on("current_player_updated", (isPlayer1) => {
-      setCurrentPlayer(isPlayer1); // Update the current player state
-      if (!isPlayer1) setCountdown(20); // Start 20 seconds for Player 2
+      if (isCreator || isFollower) handleSubmit();
     });
     
     socket.on("start_game", handleStart);
@@ -153,7 +147,7 @@ function PianoComponent() {
             <div className="timer">{countdown}</div>
           </div>
           <div className="turn-pointer">
-            {currentPlayer === true ? (
+            {(isCreator || isFollower) === true ? (
               <img src="/gamepage_image/turn-left.png" alt="turn-left" />
             ) : (
               <img src="/gamepage_image/turn-right.png" alt="turn-right" />

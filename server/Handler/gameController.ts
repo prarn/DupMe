@@ -2,21 +2,21 @@ import { Server, Socket } from "socket.io";
 import { users, rooms } from "../dataStorage";
 
 export function readySetGo (io: Server, socket: Socket, roomId: string, isCreating: boolean, onTimeout: () => void): void {
-    let currentTime = 4;
+    let currentTime = 5;
     const interval = setInterval(() => {
         if (currentTime === 0) {
             io.to(roomId).emit('time', "");
-            io.to(roomId).emit('update_cooldown',false);
+            io.to(roomId).emit('update_banner',false);
             onTimeout();
             clearInterval(interval);
         } else if (currentTime === 1) {
             io.to(roomId).emit('time', "Go");
         } else if (currentTime === 2) {
             io.to(roomId).emit('time', "Set");
-        }else if (currentTime === 2) {
+        }else if (currentTime === 3) {
             io.to(roomId).emit('time', "Ready");
-        }else if (currentTime >= 3) {
-            io.to(roomId).emit('update_cooldown',true);
+        }else if (currentTime > 3) {
+            io.to(roomId).emit('update_banner',true);
             if (isCreating) {
                 socket.emit('turn', "Your turn to create a pattern");
                 socket.to(roomId).emit('turn', 'Waiting for another player to create a pattern');
