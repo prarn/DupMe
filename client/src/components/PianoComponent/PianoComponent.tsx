@@ -60,6 +60,7 @@ function PianoComponent() {
       socket.emit("end_create");
       setNoteList([]);
       setIsCreator(false);
+      console.log('End Creating');
     } else if (isFollower) {
       // Follower's turn
       const pointsEarned = noteList.reduce((points, note, index) => {
@@ -69,8 +70,9 @@ function PianoComponent() {
       setNoteList([]); // Reset the note list for the next round
       setNoteList_Received([]); // Reset the note list for the next round
       setIsFollower(false);
+      console.log('End following');
     }else {
-      console.log("error");
+      console.log("Submit not working right now");
     }
   };
 
@@ -114,10 +116,12 @@ function PianoComponent() {
     });
     socket.on("start_create", () => {
       setIsCreator(true);
+      console.log('Creating');
     })
     socket.on("start_follow", () => {
       setIsFollower(true);
       handleReplay();
+      console.log('Following');
     })
 
     return () => {
@@ -173,7 +177,9 @@ function PianoComponent() {
             ))}
         </div>
 
-        <button className="submit" onClick={() => {socket.emit("stop_countdown");}}>
+        <button 
+          className="submit" 
+          onClick={() => {socket.emit("stop_countdown");}}>
           Submit
         </button>
       </div>

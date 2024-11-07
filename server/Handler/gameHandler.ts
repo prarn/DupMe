@@ -94,10 +94,12 @@ function gameHandler(io:Server, socket: Socket) {
     
                     rooms[roomIndex].round = 1;
                     console.log(`Starting game in room ${roomId}, first player is ${p1name}.`);
+                    // console.log(`Updated player:`, playersInRoom)
     
                     // io.to(roomId).emit('turn', defaultp1 );
                     // io.to(roomId).emit('start_game');
                     io.to(p1sid).emit('start_game');
+                    io.to(roomId).emit('waiting_message', "");
                 } else {
                     socket.emit('waiting_message', "Waiting for another player");
                     console.log('Waiting for another player to be ready.');
