@@ -158,7 +158,7 @@ function PianoComponent() {
           disabled={isReady}>
           Ready
         </button>
-        <div>{waitingMessage}</div>
+        <div className="waiting-message">{waitingMessage}</div>
 
         <div className="time">
           <div className="timer-background">

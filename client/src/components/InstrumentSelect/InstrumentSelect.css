@@ -17,3 +17,6 @@
   font-size: 30px;
   margin: 5px;
 }
+.instrument-button button:hover {
+  background-color: darkred; /* Change this color as needed */
+}
