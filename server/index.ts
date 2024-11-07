@@ -7,7 +7,7 @@ import gameHandler from "./Handler/gameHandler";
 import roomHandler from "./Handler/roomHandler";
 import userHandler from "./Handler/userHandler";
 import chatHandler from "./Handler/chatHandler";
-import { users, rooms } from "./dataStorage";  // Assuming user and room data are stored here
+import serverHandler from './Handler/severHandler';
 
 const app = express();
 app.use(cors());
@@ -37,38 +37,7 @@ io.on("connection", (socket: Socket) => {
   roomHandler(io, socket);
   userHandler(io, socket);
   chatHandler(io, socket);
-
-  // Emit current user count to newly connected client
-  socket.emit('users', users);
-
-  // Handle user refresh request
-  socket.on('server_users', () => {
-    socket.emit('users', users);  // Send updated user data to client
-  });
-
-  // Handle room restart request
-  socket.on('server_restart', ({ roomId }) => {
-    console.log(`Restarting ${roomId}`);
-    const room = rooms.find((r) => r.roomId === roomId);
-
-    if (room) {
-      room.round = 1;  // Reset room state
-      io.to(roomId).emit('room_restarted', roomId);  // Notify users in room
-      console.log(`${roomId} has been restarted.`);
-    } else {
-      console.log(`Room ${roomId} not found.`);
-    }
-  });
-
-  // Handle user disconnect
-  socket.on("disconnect", () => {
-    console.log(`User disconnected: ${socket.id}`);
-    const userIndex = users.findIndex((user) => user.sid === socket.id);
-    if (userIndex !== -1) {
-      users.splice(userIndex, 1);  // Remove user from list
-      io.emit('users', users);  // Broadcast updated user list to all clients
-    }
-  });
+  serverHandler(io, socket);
 });
 
 // Start the server

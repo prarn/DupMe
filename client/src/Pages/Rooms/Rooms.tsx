@@ -11,10 +11,25 @@ import Lobby from "../../components/Lobby/Lobby";
 function Rooms() {
   const navigate = useNavigate();
   const [userCreated, setUserCreated] = useState(false);
+  const [avatarChose, setAvatarChose] = useState(false);
   const [rooms, setRooms] = useState<{ roomId: string; players: number }[]>([]);
   const [username, setUsername] = useState("");
   const [messages, setMessages] = useState<{ user: string; message: string }[]>([]);
   const [messageInput, setMessageInput] = useState("");
+
+  useEffect(() => {
+    socket.emit("check_user");
+    socket.on('check_userCreated', (data) => {
+      setUserCreated(data);
+    });
+    socket.on('check_avatarChose',(data) => {
+      setAvatarChose(data);
+    });
+    return () => {
+      socket.off('check_userCreated');
+      socket.off('check_avatarChose');
+    }
+  });
 
   // Handle when create room button is clicked
   const handleCreateRoom = () => {
@@ -45,12 +60,16 @@ function Rooms() {
 
   // Handle when players join the room
   const handleJoin = (roomId: string) => {
-    if (userCreated) {
+    if (userCreated && avatarChose) {
       console.log(`Joining room ${roomId}`);
       socket.emit("join_room", roomId);
       navigate("/game");
+    } else if (!userCreated) {
+      alert("Please enter your username!");
+    } else if (!avatarChose) {
+      alert("Please select your avatar!");
     } else {
-      alert("Please enter your username first!");
+      alert("Please enter your username and select your avatar!");
     }
   };
 
@@ -91,7 +110,7 @@ function Rooms() {
       {/* Only render UserModal if user is not created */}
       {!userCreated && (
         <div className="user-modal">
-          <UserModal setUserCreated={setUserCreated} setUsername={setUsername} />
+          <UserModal setUserCreated={setUserCreated} setAvatarChose={setAvatarChose} setUsername={setUsername}/>
         </div>
       )}
 

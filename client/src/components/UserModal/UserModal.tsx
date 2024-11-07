@@ -6,18 +6,23 @@ function UserModal({
   setUserCreated,
 }: {
   setUserCreated: (value: boolean) => void;
+  setAvatarChose: (value: boolean) => void;
   setUsername: (value: string) => void;
 }) {
   const [username, setUsername] = useState("");
   const [avatar, setAvatar] = useState("");
 
   const handleSubmit = () => {
-    if (username.trim() !== "") {
+    if (username.trim() !== "" && avatar.trim() !== "") {
       socket.emit("create_user", { username: username.trim(), avatar });
       setUserCreated(true);
       setUsername(username.trim());
+    } else if (username.trim() === "") {
+      alert("Please enter your username!");
+    } else if (avatar.trim() === "") {
+      alert("Please select your avatar!");
     } else {
-      alert("Please enter a valid username!");
+      alert("Please enter your username and select your avatar!");
     }
   };
 

@@ -8,8 +8,11 @@ function PianoComponent() {
   const [noteList_Received, setNoteList_Received] = useState<{ id: number; note: string }[]>([]);
 
   const [countdown, setCountdown] = useState(10);
-  const [currentPlayer, setCurrentPlayer] = useState(true);
-  const [isready, setIsReady] = useState(false);
+  const [isCreator, setIsCreator] = useState(false);
+  const [isFollower, setIsFollower] = useState(false);
+
+  const [isReady, setIsReady] = useState(false);
+  const [waitingMessage, setWaitingMessage] = useState<string>();
 
   const handleClickKeys = (item: string) => {
     if (noteList.length < 5) {
@@ -29,44 +32,51 @@ function PianoComponent() {
     audio.play();
   };
 
+  const handleReplay = async () => {
+    for (let i = 0; i < noteList_Received.length; i++) {
+      const note = noteList_Received[i].note;
+      playSound(`/notes/piano/${note.toLowerCase()}.mp3`);
+      await new Promise((resolve) => setTimeout(resolve, 500)); // 500ms delay between notes
+    }
+  };  
+
   const handleReady = () => {
     socket.emit("ready");
     setIsReady(true);
   }
 
   const handleStart = () => {
-    setCountdown(10);
     setNoteList([]);
     setNoteList_Received([]);
+    setWaitingMessage("");
     socket.emit("start_game"); // Start game and initialize scores
   };
 
   const handleSubmit = () => {
-    if (currentPlayer) {
-      // Player 1's turn
-      if (noteList.length > 0) {
-        socket.emit("send_noteslist", noteList); // Send notes to server
-        socket.emit("end_create");
-        setNoteList([]);
-      }
-    } else {
-      // Player 2's turn
-      handleSecondPlayerSubmit(); // Process Player 2's submission
-      socket.emit("end_follow");
+    if (isCreator) {
+      // Creator's turn
+      if (noteList.length > 0) socket.emit("send_noteslist", noteList); // Send notes to server
+      socket.emit("end_create");
+      setNoteList([]);
+      setIsCreator(false);
+      console.log('End Creating');
+    } else if (isFollower) {
+      // Follower's turn
+      const pointsEarned = noteList.reduce((points, note, index) => {
+        return note.note === noteList_Received[index]?.note ? points + 1 : points;
+      }, 0);
+      socket.emit("end_follow", pointsEarned); // Send points earned to server
+      setNoteList([]); // Reset the note list for the next round
+      setNoteList_Received([]); // Reset the note list for the next round
+      setIsFollower(false);
+      console.log('End following');
+    }else {
+      console.log("Submit not working right now");
     }
   };
 
   const handleReset = () => {
     setNoteList([]);
-  };
-
-  const handleSecondPlayerSubmit = () => {
-    const pointsEarned = noteList.reduce((points, note, index) => {
-      return note.note === noteList_Received[index]?.note ? points + 1 : points;
-    }, 0);
-    socket.emit("score_points", pointsEarned); // Send points earned to server
-    setNoteList([]); // Reset the note list for the next round
-    setNoteList_Received([]); // Reset the note list for the next round
   };
   
   //See received note list in console
@@ -83,7 +93,7 @@ function PianoComponent() {
     };
   }, []);
 
-  //Countdown update + Current player update
+  //Socket form server
   useEffect(() => {
     socket.on("countdown_update", (data) => {
       setCountdown(data.countdown);
@@ -91,21 +101,35 @@ function PianoComponent() {
 
     socket.on("countdown_finished", () => {
       setCountdown(0);
-      handleSubmit();
-    });
-
-    socket.on("current_player_updated", (isPlayer1) => {
-      setCurrentPlayer(isPlayer1); // Update the current player state
-      if (!isPlayer1) setCountdown(20); // Start 20 seconds for Player 2
+      if (isCreator || isFollower) handleSubmit();
     });
     
-    socket.on("start_create",handleStart);
+    socket.on("start_game", handleStart);
+    socket.on("waiting_message", (data) => {
+      setWaitingMessage(data);
+    });
+    socket.on("start_create", () => {
+      setIsCreator(true);
+      console.log('Creating');
+    })
+    socket.on("start_follow", () => {
+      setIsFollower(true);
+      handleReplay();
+      console.log('Following');
+    })
+    socket.on("restart", () => {
+      setIsReady(false);
+      setCountdown(10);
+    })
 
     return () => {
       socket.off("countdown_update");
       socket.off("countdown_finished");
       socket.off("current_player_updated");
+      socket.off("start_game");
       socket.off("start_create");
+      socket.off("start_follow");
+      socket.off("restart");
     };
   });
 
@@ -113,9 +137,13 @@ function PianoComponent() {
   return (
     <>
       <div className="status">
-        <button className="start" onClick={handleReady} disabled={isready}>
+        <button 
+          className={isReady ? "button-ready-clicked":"start"}
+          onClick={handleReady} 
+          disabled={isReady}>
           Ready
         </button>
+        <div>{waitingMessage}</div>
 
         <div className="time">
           <div className="timer-background">
@@ -124,7 +152,7 @@ function PianoComponent() {
             <div className="timer">{countdown}</div>
           </div>
           <div className="turn-pointer">
-            {currentPlayer === true ? (
+            {(isCreator || isFollower) === true ? (
               <img src="/gamepage_image/turn-left.png" alt="turn-left" />
             ) : (
               <img src="/gamepage_image/turn-right.png" alt="turn-right" />
@@ -148,13 +176,15 @@ function PianoComponent() {
             ))}
         </div>
 
-        <button className="submit" onClick={handleSubmit}>
+        <button 
+          className="submit" 
+          onClick={() => {socket.emit("stop_countdown");}}>
           Submit
         </button>
       </div>
 
       <div className="controls">
-        <button className="replay">
+        <button className="replay" onClick={handleReplay}>
           Replay
           <img src="/gamepage_image/speaker.png" alt="speaker" />
         </button>

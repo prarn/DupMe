@@ -2,7 +2,6 @@ import { Server, Socket } from "socket.io";
 import { rooms, users } from "../dataStorage";
 
 function userHandler(io: Server, socket: Socket) {
-
   const createUser = (data: { username: string; avatar: string }) => {
     const user = {
       sid: socket.id,
@@ -22,6 +21,14 @@ function userHandler(io: Server, socket: Socket) {
     io.emit('update_player_count', users.length); // Broadcasting to all clients
   };
   
+
+  const checkUser = () => {
+    const user = users.find((user) => user.sid === socket.id);
+    if (user) {
+      socket.emit('check_userCreated', user.username.trim() !== "");
+      socket.emit('check_avatarChose', user.avatar.trim() !== "");
+    }
+  }
 
   const updateInstrument = (data) => {
     const me = users.find((user) => user.sid === socket.id);
@@ -106,11 +113,14 @@ function userHandler(io: Server, socket: Socket) {
   };
 
   socket.on("create_user", createUser);
+  socket.on("check_user", checkUser);
   socket.on("update_instrument", updateInstrument);
   socket.on("update_avatar", updateAvatar);
 
   return () => {
     socket.off("create_user", createUser);
+    socket.off("update_instrument", updateInstrument);
+    socket.off("update_avatar", updateAvatar);
   };
 }
 
