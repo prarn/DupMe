@@ -13,10 +13,14 @@ function userHandler(io: Server, socket: Socket) {
       ready: false,
       P1: false,
     };
-
+  
     users.push(user);
     console.log(`User created: ${data.username}`);
+  
+    // Emit the updated player count to all clients
+    io.emit('update_player_count', users.length); // Broadcasting to all clients
   };
+  
 
   const checkUser = () => {
     const user = users.find((user) => user.sid === socket.id);
